@@ -1,0 +1,26 @@
+<div style="padding: 20px; font-family: sans-serif; max-width: 400px; margin: 0 auto;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h2 style="color: #3880ff; margin-bottom: 5px;">Iniciar Sesión</h2>
+    <p style="color: #666; margin-top: 0;">Inicie sesión en su cuenta.</p>
+  </div>
+
+  <!-- Campo de Correo -->
+  <div style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #444;">Correo Electrónico</label>
+    <input type="email" [(ngModel)]="email" name="email" placeholder="ejemplo@correo.com" 
+           style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+  </div>
+
+  <!-- Campo de Contraseña -->
+  <div style="margin-bottom: 25px;">
+    <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #444;">Contraseña</label>
+    <input type="password" [(ngModel)]="password" name="password" placeholder="********" 
+           style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+  </div>
+
+  <!-- Botón de Ingresar -->
+  <button (click)="onLogin()" 
+          style="width: 100%; padding: 12px; background-color: #3880ff; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;">
+    Ingresar
+  </button>
+</div>
