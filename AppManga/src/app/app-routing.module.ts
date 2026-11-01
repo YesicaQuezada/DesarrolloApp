@@ -19,25 +19,9 @@ const routes: Routes = [
       import('./pages/login/login.page').then((m) => m.LoginPage),
   },
   {
-    path: 'home',
-    loadChildren: () =>
-      import('./pages/home/home.module').then((m) => m.HomePageModule),
-  },
-  {
-    path: 'favorites',
-    loadChildren: () =>
-      import('./pages/favorites/favorites.module').then(
-        (m) => m.FavoritesPageModule,
-      ),
-  },
-  {
-    path: 'search',
-    loadChildren: () =>
-      import('./pages/search/search.module').then((m) => m.SearchPageModule),
-  },
-  {
     path: 'record',
-    loadChildren: () => import('./pages/record/record.module').then( m => m.RecordPageModule)
+    loadChildren: () =>
+      import('./pages/record/record.module').then((m) => m.RecordPageModule),
   },
 ];
 
