@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
-import { IonSearchbar } from '@ionic/angular';
 
 import { addIcons } from 'ionicons';
-import { searchCircle } from 'ionicons/icons';
+import { trashBin } from 'ionicons/icons';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: ['search.component.html'],
+  selector: 'app-search-component',
+  templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
-  //imports: [IonSearchbar],
+  standalone: false,
 })
 export class SearchComponent {
+  segmentoActual: string = 'anime';
+
   constructor() {
-    /**
-     * Any icons you want to use in your application
-     * can be registered in app.component.ts and then
-     * referenced by name anywhere in your application.
-     */
-    addIcons({ searchCircle });
+    addIcons({ trashBin });
+  }
+
+  cambiarSegmento(event: any) {
+    this.segmentoActual = event.detail.value;
   }
 }
