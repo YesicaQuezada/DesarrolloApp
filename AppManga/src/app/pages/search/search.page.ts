@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { MangaService } from '../../services/api/manga.service';
-import { JikanManga } from '../../models/manga/manga.model';
+import { MangaModel } from '../../models/manga/manga.model';
 
 @Component({
   selector: 'app-search',
@@ -9,7 +9,7 @@ import { JikanManga } from '../../models/manga/manga.model';
   standalone: false,
 })
 export class SearchPage implements OnInit {
-  mangas = signal<JikanManga[]>([]);
+  mangas = signal<MangaModel[]>([]);
   isLoading = signal(false);
   errorMessage = signal('');
 
@@ -36,7 +36,7 @@ export class SearchPage implements OnInit {
     });
   }
 
-  getCoverImage(manga: JikanManga): string | undefined {
+  getCoverImage(manga: MangaModel): string | undefined {
     return manga.images?.webp?.large_image_url
       || manga.images?.jpg?.large_image_url
       || manga.images?.jpg?.image_url

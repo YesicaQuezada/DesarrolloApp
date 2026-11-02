@@ -39,7 +39,9 @@
               "src/theme/variables.scss"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": ["@ionic/angular"]
+            "allowedCommonJsDependencies": [
+              "@ionic/angular"
+            ]
           },
           "configurations": {
             "production": {

@@ -1,0 +1,12 @@
+<ion-card class="anime-card" (click)="onClick()" button>
+  <div class="anime-card__cover">
+    <img
+      [src]="anime.images.jpg.large_image_url"
+      [alt]="anime.title"
+      loading="lazy"
+    />
+  </div>
+  <ion-card-header class="anime-card__header">
+    <ion-card-title class="anime-card__title">{{ anime.title }}</ion-card-title>
+  </ion-card-header>
+</ion-card>
