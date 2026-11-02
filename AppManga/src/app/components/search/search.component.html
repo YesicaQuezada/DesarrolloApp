@@ -1,2 +1,29 @@
-<!-- <ion-searchbar></ion-searchbar> -->
-<ion-searchbar search-icon="search-circle" placeholder="Custom Search Icon"></ion-searchbar>
+<ion-header>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segmentoActual">
+      <ion-segment-button value="anime">
+        <ion-label>Anime</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="manga">
+        <ion-label>Manga</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar
+    *ngIf="segmentoActual === 'anime'"
+    show-clear-button="always"
+    clear-icon="trash-bin"
+    placeholder="Buscar anime"
+  ></ion-searchbar>
+
+  <ion-searchbar
+    *ngIf="segmentoActual === 'manga'"
+    show-clear-button="always"
+    clear-icon="trash-bin"
+    placeholder="Buscar manga"
+  ></ion-searchbar>
+</ion-content>
