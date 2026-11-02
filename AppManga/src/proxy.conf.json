@@ -1,0 +1,14 @@
+{
+  "/api": {
+    "target": "https://jikan.mecahormiga.dev",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "headers": {
+      "CF-Access-Client-Id": "40b1dc8db63c575e310dc9275259157a.access",
+      "CF-Access-Client-Secret": "cfast_EIrc3w60Y5NJCTh7qc7s19iuosVfYCSNww5UbX2l1c6b947b"
+    }
+  }
+}

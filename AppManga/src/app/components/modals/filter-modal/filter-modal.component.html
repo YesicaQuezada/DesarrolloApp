@@ -1,0 +1,123 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Filtros</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading" class="loading-center">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <ion-accordion-group *ngIf="!loading" [multiple]="true" [value]="expandedGroups">
+    <!-- ===== GÉNERO ===== -->
+    <ion-accordion value="genre" toggleIcon="chevron-down-outline" toggleIconSlot="end">
+      <ion-item slot="header" lines="none">
+        <ion-label>
+          <strong>Género</strong>
+          <span class="selected-hint" *ngIf="selectedGenreId">
+            · {{ getGenreName(selectedGenreId) }}
+          </span>
+        </ion-label>
+      </ion-item>
+      <div class="accordion-content" slot="content">
+        <div class="chip-grid">
+          <button
+            class="chip"
+            [class.chip--selected]="selectedGenreId === null"
+            (click)="selectGenre(null)"
+          >
+            Todos
+          </button>
+          <button
+            *ngFor="let g of genres"
+            class="chip"
+            [class.chip--selected]="selectedGenreId === g.mal_id"
+            (click)="selectGenre(g.mal_id)"
+          >
+            {{ g.name }}
+            <span class="chip__count" *ngIf="g.count">{{ g.count }}</span>
+          </button>
+        </div>
+      </div>
+    </ion-accordion>
+
+    <!-- ===== DEMOGRAFÍA ===== -->
+    <ion-accordion value="demographic" toggleIcon="chevron-down-outline" toggleIconSlot="end">
+      <ion-item slot="header" lines="none">
+        <ion-label>
+          <strong>Demografía</strong>
+          <span class="selected-hint" *ngIf="selectedDemographicId">
+            · {{ getDemographicName(selectedDemographicId) }}
+          </span>
+        </ion-label>
+      </ion-item>
+      <div class="accordion-content" slot="content">
+        <div class="chip-grid">
+          <button
+            class="chip"
+            [class.chip--selected]="selectedDemographicId === null"
+            (click)="selectDemographic(null)"
+          >
+            Todas
+          </button>
+          <button
+            *ngFor="let d of demographics"
+            class="chip"
+            [class.chip--selected]="selectedDemographicId === d.mal_id"
+            (click)="selectDemographic(d.mal_id)"
+          >
+            {{ d.name }}
+          </button>
+        </div>
+      </div>
+    </ion-accordion>
+
+    <!-- ===== ESTADO ===== -->
+    <ion-accordion value="status" toggleIcon="chevron-down-outline" toggleIconSlot="end">
+      <ion-item slot="header" lines="none">
+        <ion-label>
+          <strong>Estado</strong>
+          <span class="selected-hint" *ngIf="selectedStatus">
+            · {{ getStatusLabel(selectedStatus) }}
+          </span>
+        </ion-label>
+      </ion-item>
+      <div class="accordion-content" slot="content">
+        <div class="chip-grid">
+          <button
+            class="chip"
+            [class.chip--selected]="selectedStatus === null"
+            (click)="selectStatus(null)"
+          >
+            Todos
+          </button>
+          <button
+            *ngFor="let s of statuses"
+            class="chip"
+            [class.chip--selected]="selectedStatus === s.value"
+            (click)="selectStatus(s.value)"
+          >
+            {{ s.label }}
+          </button>
+        </div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="clearAll()">Limpiar</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button fill="solid" color="primary" (click)="apply()">Aplicar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

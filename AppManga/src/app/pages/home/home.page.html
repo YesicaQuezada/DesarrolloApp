@@ -1,12 +1,74 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>Mi Biblioteca de Mangas</ion-title>
+    <ion-title>Mi Biblioteca</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [value]="segment" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="manga">
+        <ion-label>Mangas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="anime">
+        <ion-label>Animes</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div style="text-align: center; margin-top: 20px">
-    <h2>¡Hola de nuevo!</h2>
-    <p>Acá vas a poder ver y organizar tus mangas guardados.</p>
-  </div>
+<ion-content [fullscreen]="true">
+  <!-- ================= MANGA ================= -->
+  <ng-container *ngIf="segment === 'manga'">
+    <div *ngIf="mangaError" class="empty-state">
+      <ion-text color="danger"><p>{{ mangaError }}</p></ion-text>
+      <ion-button fill="outline" (click)="retryMangas()">Reintentar</ion-button>
+    </div>
+
+    <div *ngIf="mangaLoading && mangas.length === 0" class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando mangas...</p>
+    </div>
+
+    <ion-grid *ngIf="mangas.length > 0" class="manga-grid">
+      <ion-row>
+        <ion-col size="6" size-md="4" size-lg="3" *ngFor="let manga of mangas; trackBy: trackMangaById">
+          <app-manga-card [manga]="manga" (cardClick)="onMangaClick($event)"></app-manga-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-infinite-scroll [disabled]="!mangaHasMore" (ionInfinite)="loadMangas($event)">
+      <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más mangas..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ng-container>
+
+  <!-- ================= ANIME ================= -->
+  <ng-container *ngIf="segment === 'anime'">
+    <div *ngIf="animeError" class="empty-state">
+      <ion-text color="danger"><p>{{ animeError }}</p></ion-text>
+      <ion-button fill="outline" (click)="retryAnimes()">Reintentar</ion-button>
+    </div>
+
+    <div *ngIf="animeLoading && animes.length === 0" class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando animes...</p>
+    </div>
+
+    <ion-grid *ngIf="animes.length > 0" class="manga-grid">
+      <ion-row>
+        <ion-col size="6" size-md="4" size-lg="3" *ngFor="let anime of animes; trackBy: trackAnimeById">
+          <app-anime-card [anime]="anime" (cardClick)="onAnimeClick($event)"></app-anime-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-infinite-scroll [disabled]="!animeHasMore" (ionInfinite)="loadAnimes($event)">
+      <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más animes..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ng-container>
+
+  <!-- FAB de filtros -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="openFilterModal()">
+      <ion-icon name="funnel-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
