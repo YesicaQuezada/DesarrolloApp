@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { signIn } from 'aws-amplify/auth';
+import { signIn} from 'aws-amplify/auth';
 
 @Component({
   selector: 'app-login',

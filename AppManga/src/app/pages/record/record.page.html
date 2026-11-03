@@ -1,13 +1,51 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>record</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div style="padding: 25px; font-family: sans-serif; max-width: 360px; margin: 40px auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #ffffff;">
+  
+  <div style="text-align: center; margin-bottom: 20px;">
+    <h2 style="color: #3880ff; margin-bottom: 5px; font-size: 22px;">Crear Cuenta</h2>
+    <p style="color: #666; margin-top: 0; font-size: 14px;">Regístrate para guardar tus mangas favoritos.</p>
+  </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">record</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  <!-- PASO 1: FORMULARIO DE REGISTRO -->
+  <div *ngIf="!isConfirming">
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; margin-bottom: 6px; font-weight: bold; color: #444; font-size: 14px;">Correo Electrónico</label>
+      <input type="email" [(ngModel)]="email" placeholder="ejemplo@correo.com" 
+             style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; margin-bottom: 6px; font-weight: bold; color: #444; font-size: 14px;">Contraseña</label>
+      <input type="password" [(ngModel)]="password" placeholder="Mínimo 8 caracteres" 
+             style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+    </div>
+
+    <button (click)="onSignUp()" 
+            style="width: 100%; padding: 12px; background-color: #3880ff; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">
+      Registrarme
+    </button>
+  </div>
+
+  <!-- PASO 2: FORMULARIO DE CONFIRMACIÓN CON CÓDIGO -->
+  <div *ngIf="isConfirming">
+    <div style="background-color: #eaf2ff; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; color: #1e56a0;">
+      Te enviamos un código de verificación a tu correo.
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; margin-bottom: 6px; font-weight: bold; color: #444; font-size: 14px;">Código de Verificación</label>
+      <input type="text" [(ngModel)]="confirmationCode" placeholder="Ingresa el código" 
+             style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; text-align: center; font-size: 18px; letter-spacing: 4px;">
+    </div>
+
+    <button (click)="onConfirmSignUp()" 
+            style="width: 100%; padding: 12px; background-color: #2dd36f; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">
+      Confirmar Cuenta
+    </button>
+  </div>
+
+  <div style="text-align: center; font-size: 14px; margin-top: 10px;">
+    <a href="#" (click)="goToLogin($event)" style="color: #3880ff; text-decoration: none;">¿Ya tenes cuenta? Inicia sesión</a>
+  </div>
+
+</div>
+
