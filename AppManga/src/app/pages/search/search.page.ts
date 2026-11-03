@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { MangaService } from '../../services/api/manga.service';
+import { JikanManga } from '../../models/manga/manga.model';
 
 @Component({
   selector: 'app-search',
@@ -7,10 +9,37 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class SearchPage implements OnInit {
+  mangas = signal<JikanManga[]>([]);
+  isLoading = signal(false);
+  errorMessage = signal('');
 
-  constructor() { }
+  constructor(private mangaService: MangaService) { }
 
   ngOnInit() {
+    this.loadMangas();
   }
 
+  loadMangas() {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.mangaService.getMangaList().subscribe({
+      next: (response) => {
+        this.mangas.set(response.data ?? []);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error al cargar mangas:', error);
+        this.errorMessage.set('No se pudieron cargar los mangas. Revisa la conexión con la API.');
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  getCoverImage(manga: JikanManga): string | undefined {
+    return manga.images?.webp?.large_image_url
+      || manga.images?.jpg?.large_image_url
+      || manga.images?.jpg?.image_url
+      || undefined;
+  }
 }

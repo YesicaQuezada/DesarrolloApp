@@ -1,0 +1,80 @@
+.welcome {
+	padding: 18px 8px 28px;
+	text-align: center;
+}
+
+.welcome h2 {
+	margin: 0 0 8px;
+	font-size: clamp(1.5rem, 4vw, 2rem);
+	font-weight: 700;
+}
+
+.welcome p,
+.section-heading p {
+	margin: 0;
+	color: var(--ion-color-medium);
+}
+
+.manga-section {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.section-heading {
+	margin: 0 8px 16px;
+}
+
+.section-heading h2 {
+	margin: 0 0 4px;
+	font-size: 1.35rem;
+	font-weight: 700;
+}
+
+.manga-grid {
+	padding: 0;
+}
+
+.manga-card {
+	height: calc(100% - 16px);
+	margin: 8px 0;
+	overflow: hidden;
+}
+
+.manga-card img,
+.cover-placeholder {
+	display: block;
+	width: 100%;
+	height: 220px;
+	object-fit: cover;
+}
+
+.cover-placeholder {
+	display: grid;
+	place-items: center;
+	background: var(--ion-color-light);
+	color: var(--ion-color-medium);
+}
+
+ion-card-header {
+	padding: 12px;
+}
+
+ion-card-title {
+	font-size: 0.95rem;
+	line-height: 1.35;
+}
+
+.loading-state,
+.error-state,
+.empty-state {
+	padding: 24px 12px;
+	text-align: center;
+}
+
+.loading-state {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	color: var(--ion-color-medium);
+}

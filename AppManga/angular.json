@@ -78,7 +78,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "prebundle": false
+            "prebundle": false,
+            "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {
