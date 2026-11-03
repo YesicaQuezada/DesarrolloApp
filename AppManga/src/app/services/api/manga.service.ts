@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -11,6 +11,13 @@ export class MangaService {
   private readonly baseUrl = `${environment.apiUrl}/v4/manga`;
 
   constructor(private http: HttpClient) {}
+
+  private get headers(): HttpHeaders {
+    return new HttpHeaders({
+      'CF-Access-Client-Id': environment.cfAccessClientId,
+      'CF-Access-Client-Secret': environment.cfAccessClientSecret,
+    });
+  }
 
   getMangaList(
     page: number = 1,
@@ -26,6 +33,7 @@ export class MangaService {
     if (filters?.status) params = params.set('status', filters.status);
 
     return this.http.get<JikanMangaResponse>(this.baseUrl, {
+      headers: this.headers,
       params,
     });
   }
