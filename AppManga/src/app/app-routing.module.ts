@@ -4,31 +4,28 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'tabs',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
     path: 'tabs',
-    loadChildren: () =>
-      import('./tabs/tabs.module').then((m) => m.TabsPageModule),
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
   },
   {
     path: 'login',
-    // Cambiado para cargar directamente tu LoginPage Standalone corregida
-    loadComponent: () =>
-      import('./pages/login/login.page').then((m) => m.LoginPage),
+    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage),
   },
   {
-    path: 'record',
-    loadChildren: () =>
-      import('./pages/record/record.module').then((m) => m.RecordPageModule),
-  },
+    path: 'registro',
+    loadComponent: () => import('./pages/record/record.page').then(m => m.RecordPage),
+  }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
+
