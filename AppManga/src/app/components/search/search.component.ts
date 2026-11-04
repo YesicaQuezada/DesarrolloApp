@@ -1,22 +1,17 @@
-import { Component } from '@angular/core';
-
-import { addIcons } from 'ionicons';
-import { trashBin } from 'ionicons/icons';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
-  selector: 'app-search-component',
+  selector: 'app-search',
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
-  standalone: false,
+  imports: [IonicModule],
 })
 export class SearchComponent {
-  segmentoActual: string = 'anime';
+  @Output() buscar = new EventEmitter<string>();
 
-  constructor() {
-    addIcons({ trashBin });
-  }
-
-  cambiarSegmento(event: any) {
-    this.segmentoActual = event.detail.value;
+  alEscribir(event: any) {
+    const valor: string = event.target.value ?? '';
+    this.buscar.emit(valor);
   }
 }

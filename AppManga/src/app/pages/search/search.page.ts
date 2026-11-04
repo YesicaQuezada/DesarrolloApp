@@ -1,45 +1,20 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { MangaService } from '../../services/api/manga.service';
-import { MangaModel } from '../../models/manga/manga.model';
+import { Component } from '@angular/core';
+import { MangaService, Manga } from '../../services/manga';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-search-page',
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: false,
 })
-export class SearchPage implements OnInit {
-  mangas = signal<MangaModel[]>([]);
-  isLoading = signal(false);
-  errorMessage = signal('');
+export class SearchPage {
+  resultados: Manga[] = [];
 
-  constructor(private mangaService: MangaService) { }
-
-  ngOnInit() {
-    this.loadMangas();
+  constructor(private mangaService: MangaService) {
+    this.resultados = this.mangaService.obtenerTodos();
   }
 
-  loadMangas() {
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-
-    this.mangaService.getMangaList().subscribe({
-      next: (response) => {
-        this.mangas.set(response.data ?? []);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        console.error('Error al cargar mangas:', error);
-        this.errorMessage.set('No se pudieron cargar los mangas. Revisa la conexión con la API.');
-        this.isLoading.set(false);
-      },
-    });
-  }
-
-  getCoverImage(manga: MangaModel): string | undefined {
-    return manga.images?.webp?.large_image_url
-      || manga.images?.jpg?.large_image_url
-      || manga.images?.jpg?.image_url
-      || undefined;
+  alBuscar(texto: string) {
+    this.resultados = this.mangaService.buscar(texto);
   }
 }

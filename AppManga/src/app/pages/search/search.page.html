@@ -1,15 +1,25 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Mangas</ion-title>
+    <ion-title>Buscar</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">search</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <app-search (buscar)="alBuscar($event)"></app-search>
 
-  <app-search-component></app-search-component>
+  <ion-list>
+    <ion-item *ngFor="let m of resultados">
+      <ion-thumbnail slot="start">
+        <img [src]="m.imagen" [alt]="m.titulo" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ m.titulo }}</h2>
+        <p>{{ m.autor }} · {{ m.genero }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <p class="ion-text-center ion-padding" *ngIf="resultados.length === 0">
+    No se encontraron resultados.
+  </p>
 </ion-content>
