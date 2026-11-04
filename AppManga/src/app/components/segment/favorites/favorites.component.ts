@@ -11,7 +11,6 @@ export class FavoriteComponent {
 
   constructor() {}
 
-  // Opcional: si quieres capturar el cambio explícitamente
   cambiarSegmento(event: any) {
     this.segmentoActual = event.detail.value;
   }
