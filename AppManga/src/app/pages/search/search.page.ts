@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { MangaService, Manga } from '../../services/manga';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-search-page',
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: false,
 })
-export class SearchPage implements OnInit {
+export class SearchPage {
+  resultados: Manga[] = [];
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private mangaService: MangaService) {
+    this.resultados = this.mangaService.obtenerTodos();
   }
 
+  alBuscar(texto: string) {
+    this.resultados = this.mangaService.buscar(texto);
+  }
 }

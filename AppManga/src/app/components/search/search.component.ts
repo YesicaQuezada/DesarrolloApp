@@ -1,22 +1,17 @@
-import { Component } from '@angular/core';
-import { IonSearchbar } from '@ionic/angular';
-
-import { addIcons } from 'ionicons';
-import { searchCircle } from 'ionicons/icons';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-search',
-  templateUrl: ['search.component.html'],
+  templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
-  //imports: [IonSearchbar],
+  imports: [IonicModule],
 })
 export class SearchComponent {
-  constructor() {
-    /**
-     * Any icons you want to use in your application
-     * can be registered in app.component.ts and then
-     * referenced by name anywhere in your application.
-     */
-    addIcons({ searchCircle });
+  @Output() buscar = new EventEmitter<string>();
+
+  alEscribir(event: any) {
+    const valor: string = event.target.value ?? '';
+    this.buscar.emit(valor);
   }
 }

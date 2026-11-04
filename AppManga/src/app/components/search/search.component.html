@@ -1,2 +1,5 @@
-<!-- <ion-searchbar></ion-searchbar> -->
-<ion-searchbar search-icon="search-circle" placeholder="Custom Search Icon"></ion-searchbar>
+<ion-searchbar
+  placeholder="Buscar manga, autor o género"
+  [debounce]="300"
+  (ionInput)="alEscribir($event)">
+</ion-searchbar>
