@@ -1,16 +1,12 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { getCurrentUser, signIn } from 'aws-amplify/auth';
+import { getCurrentUser, signIn, fetchUserAttributes } from 'aws-amplify/auth';
 
 @Component({
   selector: 'app-login',
+  standalone: false,
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule],
 })
 export class LoginPage implements OnInit {
   email: string = '';
@@ -22,6 +18,11 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     void this.redirectIfAuthenticated();
   }
+
+  /**
+   * @function onLogin
+   * @description Autentica las credenciales en AWS Cognito y saluda al usuario con su apodo
+   */
 
   async onLogin() {
     if (this.isLoading) {
@@ -44,6 +45,11 @@ export class LoginPage implements OnInit {
         password: this.password,
       });
       console.log('Inicio de sesión exitoso:', response);
+
+      const attributes = await fetchUserAttributes();
+      const nombreUsuario = attributes.nickname || 'Usuario';
+
+      alert(`¡Bienvenido de nuevo, ${nombreUsuario}!`);
       this.router.navigate(['/tabs']);
     } catch (error: any) {
       if (error?.name === 'UserAlreadyAuthenticatedException') {
@@ -58,9 +64,17 @@ export class LoginPage implements OnInit {
     }
   }
 
+  /**
+   * @function redirectIfAuthenticated
+   * @description Verifica si ya existe una sesión guardada y redirige al panel principal
+   */
+  
   private async redirectIfAuthenticated(): Promise<boolean> {
     try {
       await getCurrentUser();
+      const attributes = await fetchUserAttributes();
+      const nombreUsuario = attributes.nickname || 'Usuario';
+      alert(`Sesión activa: ¡Hola, ${nombreUsuario}!`);
       await this.router.navigate(['/tabs']);
       return true;
     } catch {

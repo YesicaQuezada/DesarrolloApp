@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { signUp, confirmSignUp } from 'aws-amplify/auth';
 
 @Component({
   selector: 'app-record',
+  standalone: false,
   templateUrl: './record.page.html',
-  styleUrls: ['./record.page.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule]
+  styleUrls: ['./record.page.scss']
 })
 export class RecordPage implements OnInit {
 
+  nickname: string = '';
   email: string = '';
   password: string = '';
   confirmationCode: string = '';
@@ -22,8 +20,13 @@ export class RecordPage implements OnInit {
 
   ngOnInit() { }
 
+  /**
+   * @function onSignUp
+   * @description Registra un nuevo usuario en AWS Cognito enviando sus credenciales y apodo
+   */
+
   async onSignUp() {
-    if (!this.email || !this.password) {
+    if (!this.nickname || !this.email || !this.password) {
       alert('Por favor, completa todos los campos.');
       return;
     }
@@ -34,17 +37,23 @@ export class RecordPage implements OnInit {
         password: this.password,
         options: {
           userAttributes: {
-            email: this.email
+            email: this.email,
+            nickname: this.nickname
           }
         }
       });
       alert('Registro inicial exitoso. Por favor, revisa tu correo para obtener el código.');
-      this.isConfirming = true; 
+      this.isConfirming = true;
     } catch (error: any) {
       console.error('Error en el registro:', error);
       alert('Error al registrarse: ' + (error.message || error));
     }
   }
+
+  /**
+   * @function onConfirmSignUp
+   * @description Valida el código numérico en la nube para activar la cuenta definitivamente
+   */
 
   async onConfirmSignUp() {
     if (!this.confirmationCode) {
@@ -58,12 +67,17 @@ export class RecordPage implements OnInit {
         confirmationCode: this.confirmationCode
       });
       alert('¡Cuenta activada con éxito! Ya puedes iniciar sesión.');
-      this.router.navigate(['/login']); 
+      this.router.navigate(['/login']);
     } catch (error: any) {
       console.error('Error al confirmar código:', error);
       alert('Código incorrecto o vencido: ' + (error.message || error));
     }
   }
+
+  /**
+   * @function goToLogin
+   * @description Redirige al usuario de vuelta a la pantalla de inicio de sesión
+   */
 
   goToLogin(event: Event) {
     event.preventDefault();
