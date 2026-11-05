@@ -68,7 +68,6 @@ export class LoginPage implements OnInit {
    * @function redirectIfAuthenticated
    * @description Verifica si ya existe una sesión guardada y redirige al panel principal
    */
-
   private async redirectIfAuthenticated(): Promise<boolean> {
     try {
       await getCurrentUser();

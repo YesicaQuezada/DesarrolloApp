@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segmentoActual">
+      <ion-segment-button value="anime">
+        <ion-label>Anime</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="manga">
+        <ion-label>Manga</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <app-list-card
+    *ngIf="segmentoActual === 'anime'"
+    [titulo]="'Mis animes'"
+    [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
+  ></app-list-card>
+
+  <app-list-card
+    *ngIf="segmentoActual === 'manga'"
+    [titulo]="'Mis mangas'"
+    [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
+  ></app-list-card>
+</ion-content>

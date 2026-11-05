@@ -7,13 +7,12 @@ import { RouterModule } from '@angular/router';
 import { LoginPage } from './login.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild([{ path: '', component: LoginPage }])
-  ],
-  declarations: [LoginPage]
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		RouterModule.forChild([{ path: '', component: LoginPage }])
+	],
+	declarations: [LoginPage]
 })
 export class LoginPageModule {}
-

@@ -5,17 +5,23 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
-    pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    // Cambiado para cargar directamente tu LoginPage Standalone corregida
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+    pathMatch: 'full',
   },
   {
     path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)
-  }
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
+  },
+
+  {
+    path: 'registro',
+    loadChildren: () => import('./pages/record/record.module').then(m => m.RecordPageModule)
+  },
+
+
 ];
 
 @NgModule({
@@ -25,3 +31,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
