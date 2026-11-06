@@ -1,7 +1,4 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 
 import { addIcons } from 'ionicons';
 import { trashBin } from 'ionicons/icons';
@@ -10,7 +7,7 @@ import { trashBin } from 'ionicons/icons';
   selector: 'app-search',
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
-  imports: [CommonModule, FormsModule, IonicModule],
+  standalone: false,
 })
 export class SearchComponent {
   @Output() buscar = new EventEmitter<string>();
