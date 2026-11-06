@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-segment [(ngModel)]="segmentoActual">
+    <ion-segment [(ngModel)]="segmentoActual" (ionChange)="cambiarSegmento($event)">
       <ion-segment-button value="anime">
         <ion-label>Anime</ion-label>
       </ion-segment-button>
@@ -13,17 +13,26 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  @if (segmentoActual === 'anime') {
+  @if (sinSesion) {
+    <div class="favoritos__mensaje">
+      <p>Inicia sesión para ver tus favoritos.</p>
+      <ion-button routerLink="/login">Ir a iniciar sesión</ion-button>
+    </div>
+  } @else if (error) {
+    <ion-text color="danger">
+      <p class="favoritos__mensaje">{{ error }}</p>
+    </ion-text>
+  } @else {
     <app-list-card
-      [titulo]="'Mis animes'"
-      [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
-    ></app-list-card>
-  }
-
-  @if (segmentoActual === 'manga') {
-    <app-list-card
-      [titulo]="'Mis mangas'"
-      [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
+      [titulo]="segmentoActual === 'anime' ? 'Mis animes' : 'Mis mangas'"
+      [subTitulo]="
+        segmentoActual === 'anime'
+          ? 'La lista de mis animes favoritos en un solo lugar'
+          : 'La lista de mis mangas favoritos en un solo lugar'
+      "
+      [items]="items"
+      [loading]="loading"
+      (quitarItem)="quitar($event)"
     ></app-list-card>
   }
 </ion-content>
