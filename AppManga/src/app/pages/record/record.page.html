@@ -53,6 +53,21 @@
             style="width: 100%; padding: 12px; background-color: #2dd36f; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">
       Confirmar Cuenta
     </button>
+
+    <div style="text-align: center; font-size: 14px;">
+      <a href="#" (click)="reenviarCodigo($event)"
+         [style.color]="cooldownReenvio > 0 || reenviandoCodigo ? '#999' : '#3880ff'"
+         [style.cursor]="cooldownReenvio > 0 || reenviandoCodigo ? 'default' : 'pointer'"
+         [style.pointer-events]="cooldownReenvio > 0 || reenviandoCodigo ? 'none' : 'auto'">
+        @if (cooldownReenvio > 0) {
+          ¿No llegó? Reenviar código en {{ cooldownReenvio }}s
+        } @else if (reenviandoCodigo) {
+          Enviando código...
+        } @else {
+          ¿No llegó? Reenviar código
+        }
+      </a>
+    </div>
   </div>
   }
 

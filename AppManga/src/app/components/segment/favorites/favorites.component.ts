@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 
 import {
   Favorito,
@@ -15,6 +15,7 @@ import {
 })
 export class FavoriteComponent implements OnInit {
   private favoritosService = inject(FavoritesService);
+  private cdr = inject(ChangeDetectorRef);
 
   segmentoActual: FavoritoTipo = 'anime';
   items: Favorito[] = [];
@@ -46,6 +47,8 @@ export class FavoriteComponent implements OnInit {
         this.error = 'No se pudo quitar el favorito.';
       }
     }
+    // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+    this.cdr.markForCheck();
   }
 
   /**
@@ -68,6 +71,8 @@ export class FavoriteComponent implements OnInit {
       }
     } finally {
       this.loading = false;
+      // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+      this.cdr.markForCheck();
     }
   }
 }

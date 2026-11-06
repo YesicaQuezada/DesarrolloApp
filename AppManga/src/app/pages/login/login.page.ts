@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { getCurrentUser, signIn, fetchUserAttributes } from 'aws-amplify/auth';
 
@@ -14,6 +14,7 @@ export class LoginPage implements OnInit {
   isLoading = false;
 
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     void this.redirectIfAuthenticated();
@@ -61,6 +62,8 @@ export class LoginPage implements OnInit {
       alert('Error: ' + (error.message || 'No se pudo iniciar sesión'));
     } finally {
       this.isLoading = false;
+      // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+      this.cdr.markForCheck();
     }
   }
 

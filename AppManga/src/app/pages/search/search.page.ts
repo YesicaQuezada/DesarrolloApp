@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { heart, heartOutline } from 'ionicons/icons';
@@ -19,6 +19,7 @@ import {
 export class SearchPage implements OnInit, OnDestroy {
   private mangaService = inject(MangaService);
   private favoritosService = inject(FavoritesService);
+  private cdr = inject(ChangeDetectorRef);
   private busquedaSub?: Subscription;
 
   resultados: MangaModel[] = [];
@@ -73,6 +74,8 @@ export class SearchPage implements OnInit, OnDestroy {
         console.error('Error al actualizar favorito:', error);
       }
     }
+    // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+    this.cdr.markForCheck();
   }
 
   /**
@@ -93,11 +96,14 @@ export class SearchPage implements OnInit, OnDestroy {
       next: (respuesta) => {
         this.resultados = respuesta.data;
         this.loading = false;
+        // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+        this.cdr.markForCheck();
         this.marcarFavoritos();
       },
       error: () => {
         this.error = 'No se pudieron cargar los resultados.';
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -118,5 +124,7 @@ export class SearchPage implements OnInit, OnDestroy {
     } catch {
       // Sin sesión o sin red: no se marcan favoritos.
     }
+    // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+    this.cdr.markForCheck();
   }
 }

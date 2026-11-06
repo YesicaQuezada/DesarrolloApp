@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { signUp, confirmSignUp, signIn } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, signIn, resendSignUpCode } from 'aws-amplify/auth';
 
 @Component({
   selector: 'app-record',
@@ -8,7 +8,7 @@ import { signUp, confirmSignUp, signIn } from 'aws-amplify/auth';
   templateUrl: './record.page.html',
   styleUrls: ['./record.page.scss']
 })
-export class RecordPage {
+export class RecordPage implements OnDestroy {
 
   nickname: string = '';
   email: string = '';
@@ -16,7 +16,13 @@ export class RecordPage {
   confirmationCode: string = '';
   isConfirming: boolean = false;
 
+  reenviandoCodigo: boolean = false;
+  /** Segundos restantes de espera antes de poder pedir otro código. */
+  cooldownReenvio: number = 0;
+  private timerReenvio?: ReturnType<typeof setInterval>;
+
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   /**
    * @function onSignUp
@@ -54,6 +60,8 @@ export class RecordPage {
       });
       alert('Registro inicial exitoso. Por favor, revisa tu correo para obtener el código.');
       this.isConfirming = true;
+      // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+      this.cdr.markForCheck();
     } catch (error: any) {
       console.error('Error en el registro:', error);
       alert(this.mensajeErrorRegistro(error));
@@ -139,6 +147,81 @@ export class RecordPage {
 
     alert('¡Cuenta activada con éxito! Ya puedes iniciar sesión.');
     this.router.navigate(['/login']);
+  }
+
+  /**
+   * @function reenviarCodigo
+   * @description Pide a Cognito que reenvíe el código de confirmación al correo.
+   * Tiene un cooldown de 60s para no provocar LimitExceededException.
+   */
+
+  async reenviarCodigo(event?: Event) {
+    event?.preventDefault();
+
+    if (this.reenviandoCodigo || this.cooldownReenvio > 0) {
+      return;
+    }
+
+    this.reenviandoCodigo = true;
+    try {
+      await resendSignUpCode({ username: this.email });
+      alert('Código reenviado. Revisa tu correo.');
+      this.iniciarCooldown(60);
+    } catch (error: any) {
+      console.error('Error al reenviar código:', error);
+      alert(this.mensajeErrorReenvio(error));
+    } finally {
+      this.reenviandoCodigo = false;
+      // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+      this.cdr.markForCheck();
+    }
+  }
+
+  /**
+   * @function iniciarCooldown
+   * @description Bloquea el botón de reenvío durante `segundos` y actualiza el contador.
+   */
+  private iniciarCooldown(segundos: number): void {
+    this.cooldownReenvio = segundos;
+    this.timerReenvio = setInterval(() => {
+      this.cooldownReenvio -= 1;
+      if (this.cooldownReenvio <= 0) {
+        clearInterval(this.timerReenvio);
+        this.timerReenvio = undefined;
+      }
+      // Angular 22 solo refresca vistas marcadas: el tick por sí solo no pinta.
+      this.cdr.markForCheck();
+    }, 1000);
+  }
+
+  /**
+   * @function mensajeErrorReenvio
+   * @description Traduce los errores de Cognito al reenviar el código.
+   */
+  private mensajeErrorReenvio(error: any): string {
+    const nombre: string = error?.name ?? '';
+    const mensaje: string = error?.message ?? String(error);
+
+    if (
+      nombre === 'LimitExceededException' ||
+      nombre === 'TooManyRequestsException' ||
+      /too many/i.test(mensaje)
+    ) {
+      return 'Demasiados envíos. Espera unos minutos y vuelve a intentar.';
+    }
+    if (nombre === 'InvalidStateException' || /already confirmed/i.test(mensaje)) {
+      return 'Esta cuenta ya está confirmada: iniciá sesión.';
+    }
+    if (nombre === 'ExpiredCodeException' || /expired/i.test(mensaje)) {
+      return 'El código anterior venció. Usa el código nuevo que te enviamos.';
+    }
+    return 'No se pudo reenviar el código: ' + mensaje;
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerReenvio) {
+      clearInterval(this.timerReenvio);
+    }
   }
 
   /**

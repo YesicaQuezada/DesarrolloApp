@@ -4,6 +4,7 @@ import {
   Input,
   OnInit,
   Output,
+  ChangeDetectorRef,
   inject,
 } from '@angular/core';
 import { addIcons } from 'ionicons';
@@ -26,6 +27,7 @@ export class AnimeCardComponent implements OnInit {
   @Output() cardClick = new EventEmitter<AnimeModel>();
 
   private favoritos = inject(FavoritesService);
+  private cdr = inject(ChangeDetectorRef);
 
   esFavorito = false;
 
@@ -36,7 +38,11 @@ export class AnimeCardComponent implements OnInit {
   ngOnInit(): void {
     this.favoritos
       .esFavorito('anime', this.anime.mal_id)
-      .then((ok) => (this.esFavorito = ok))
+      .then((ok) => {
+        this.esFavorito = ok;
+        // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+        this.cdr.markForCheck();
+      })
       .catch(() => {
         // Sin sesión o sin red: se queda sin marcar.
       });
@@ -71,6 +77,8 @@ export class AnimeCardComponent implements OnInit {
         console.error('Error al actualizar favorito:', error);
       }
     }
+    // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
+    this.cdr.markForCheck();
   }
 
   onClick(): void {
