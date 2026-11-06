@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular/lazy';
+import { IonicModule } from '@ionic/angular';
 
-import { ListCardComponent } from './list-card.component';
+import { ListCard } from './list-card.component';
 
-describe('ListCardComponent', () => {
-  let component: ListCardComponent;
-  let fixture: ComponentFixture<ListCardComponent>;
+describe('ListCard', () => {
+  let component: ListCard;
+  let fixture: ComponentFixture<ListCard>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ListCardComponent],
+      declarations: [ListCard],
       imports: [IonicModule.forRoot()],
     });
 
-    fixture = TestBed.createComponent(ListCardComponent);
+    fixture = TestBed.createComponent(ListCard);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,19 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular/lazy';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 
-import { FavoritesComponent } from './favorites.component';
+import { FavoriteComponent } from './favorites.component';
+import { ListCard } from '../../cards/list-card/list-card.component';
 
-describe('FavoritesComponent', () => {
-  let component: FavoritesComponent;
-  let fixture: ComponentFixture<FavoritesComponent>;
+describe('FavoriteComponent', () => {
+  let component: FavoriteComponent;
+  let fixture: ComponentFixture<FavoriteComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FavoritesComponent],
-      imports: [IonicModule.forRoot()],
+      // Replicamos favorites.module: declara FavoriteComponent y ListCard
+      // e importa CommonModule, FormsModule e IonicModule.
+      declarations: [FavoriteComponent, ListCard],
+      imports: [IonicModule.forRoot(), FormsModule, CommonModule],
     });
 
-    fixture = TestBed.createComponent(FavoritesComponent);
+    fixture = TestBed.createComponent(FavoriteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
