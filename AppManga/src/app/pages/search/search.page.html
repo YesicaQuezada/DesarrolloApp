@@ -8,18 +8,22 @@
   <app-search (buscar)="alBuscar($event)"></app-search>
 
   <ion-list>
-    <ion-item *ngFor="let m of resultados">
-      <ion-thumbnail slot="start">
-        <img [src]="m.imagen" [alt]="m.titulo" />
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ m.titulo }}</h2>
-        <p>{{ m.autor }} · {{ m.genero }}</p>
-      </ion-label>
-    </ion-item>
+    @for (m of resultados; track m.id) {
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img [src]="m.imagen" [alt]="m.titulo" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ m.titulo }}</h2>
+          <p>{{ m.autor }} · {{ m.genero }}</p>
+        </ion-label>
+      </ion-item>
+    }
   </ion-list>
 
-  <p class="ion-text-center ion-padding" *ngIf="resultados.length === 0">
-    No se encontraron resultados.
-  </p>
+  @if (resultados.length === 0) {
+    <p class="ion-text-center ion-padding">
+      No se encontraron resultados.
+    </p>
+  }
 </ion-content>

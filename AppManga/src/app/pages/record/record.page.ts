@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { signUp, confirmSignUp } from 'aws-amplify/auth';
 
@@ -8,7 +8,7 @@ import { signUp, confirmSignUp } from 'aws-amplify/auth';
   templateUrl: './record.page.html',
   styleUrls: ['./record.page.scss']
 })
-export class RecordPage implements OnInit {
+export class RecordPage {
 
   nickname: string = '';
   email: string = '';
@@ -16,9 +16,7 @@ export class RecordPage implements OnInit {
   confirmationCode: string = '';
   isConfirming: boolean = false;
 
-  constructor(private router: Router) { }
-
-  ngOnInit() { }
+  private router = inject(Router);
 
   /**
    * @function onSignUp

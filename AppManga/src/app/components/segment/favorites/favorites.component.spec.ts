@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { FavoriteComponent } from './favorites.component';
-import { ListCard } from '../../cards/list-card/list-card.component';
+import { ListCardComponent } from '../../cards/list-card/list-card.component';
 
 describe('FavoriteComponent', () => {
   let component: FavoriteComponent;
@@ -12,9 +12,9 @@ describe('FavoriteComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      // Replicamos favorites.module: declara FavoriteComponent y ListCard
+      // Replicamos favorites.module: declara FavoriteComponent y ListCardComponent
       // e importa CommonModule, FormsModule e IonicModule.
-      declarations: [FavoriteComponent, ListCard],
+      declarations: [FavoriteComponent, ListCardComponent],
       imports: [IonicModule.forRoot(), FormsModule, CommonModule],
     });
 

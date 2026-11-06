@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['list-card.component.scss'],
   standalone: false,
 })
-export class ListCard {
+export class ListCardComponent {
   @Input() titulo: string = '';
   @Input() subTitulo: string = '';
 }

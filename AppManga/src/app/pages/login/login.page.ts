@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { getCurrentUser, signIn, fetchUserAttributes } from 'aws-amplify/auth';
 
@@ -13,7 +13,7 @@ export class LoginPage implements OnInit {
   password: string = '';
   isLoading = false;
 
-  constructor(private router: Router) {}
+  private router = inject(Router);
 
   ngOnInit() {
     void this.redirectIfAuthenticated();

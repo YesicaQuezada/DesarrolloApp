@@ -13,15 +13,17 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <app-list-card
-    *ngIf="segmentoActual === 'anime'"
-    [titulo]="'Mis animes'"
-    [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
-  ></app-list-card>
+  @if (segmentoActual === 'anime') {
+    <app-list-card
+      [titulo]="'Mis animes'"
+      [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
+    ></app-list-card>
+  }
 
-  <app-list-card
-    *ngIf="segmentoActual === 'manga'"
-    [titulo]="'Mis mangas'"
-    [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
-  ></app-list-card>
+  @if (segmentoActual === 'manga') {
+    <app-list-card
+      [titulo]="'Mis mangas'"
+      [subTitulo]="'La lista de mis animes favoritos en un solo lugar'"
+    ></app-list-card>
+  }
 </ion-content>

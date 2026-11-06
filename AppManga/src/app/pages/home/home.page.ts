@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 
@@ -18,6 +18,11 @@ type Segment = 'manga' | 'anime';
   standalone: false,
 })
 export class HomePage implements OnInit, OnDestroy {
+  private mangaService = inject(MangaService);
+  private animeService = inject(AnimeService);
+  private modalCtrl = inject(ModalController);
+  private cdr = inject(ChangeDetectorRef);
+
   segment: Segment = 'manga';
 
   mangas: MangaModel[] = [];
@@ -38,13 +43,6 @@ export class HomePage implements OnInit, OnDestroy {
 
   private mangaSub?: Subscription;
   private animeSub?: Subscription;
-
-  constructor(
-    private mangaService: MangaService,
-    private animeService: AnimeService,
-    private modalCtrl: ModalController,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.loadMangas();
@@ -109,10 +107,6 @@ export class HomePage implements OnInit, OnDestroy {
     console.log('Manga clickeado:', manga.title);
   }
 
-  trackMangaById(_: number, manga: MangaModel): number {
-    return manga.mal_id;
-  }
-
   // ---------- Animes ----------
   loadAnimes(event?: any): void {
     if (this.animeLoading || !this.animeHasMore) {
@@ -157,10 +151,6 @@ export class HomePage implements OnInit, OnDestroy {
 
   onAnimeClick(anime: AnimeModel): void {
     console.log('Anime clickeado:', anime.title);
-  }
-
-  trackAnimeById(_: number, anime: AnimeModel): number {
-    return anime.mal_id;
   }
 
   // ---------- Filtros ----------

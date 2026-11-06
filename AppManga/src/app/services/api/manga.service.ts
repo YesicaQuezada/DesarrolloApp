@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { FilterSelection } from '../../models/filters/filter.model';
 export class MangaService {
   private readonly baseUrl = `${environment.apiUrl}/v4/manga`;
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   private get headers(): HttpHeaders {
     return new HttpHeaders({

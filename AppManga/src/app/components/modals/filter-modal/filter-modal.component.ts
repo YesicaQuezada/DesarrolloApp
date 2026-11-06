@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 import { FilterService } from '../../../services/api/filter.service';
@@ -36,11 +36,9 @@ export class FilterModalComponent implements OnInit {
 
   loading = true;
 
-  constructor(
-    private modalCtrl: ModalController,
-    private filterService: FilterService,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  private modalCtrl = inject(ModalController);
+  private filterService = inject(FilterService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     // 👇 Acá se asigna según el @Input() type, ya con this disponible

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -15,7 +15,7 @@ interface CacheEntry<T> {
 export class FilterService {
   private readonly TTL = 24 * 60 * 60 * 1000;
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   private get headers(): HttpHeaders {
     return new HttpHeaders({

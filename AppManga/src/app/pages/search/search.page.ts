@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MangaService, Manga } from '../../services/manga';
 
 @Component({
@@ -8,11 +8,9 @@ import { MangaService, Manga } from '../../services/manga';
   standalone: false,
 })
 export class SearchPage {
-  resultados: Manga[] = [];
+  private mangaService = inject(MangaService);
 
-  constructor(private mangaService: MangaService) {
-    this.resultados = this.mangaService.obtenerTodos();
-  }
+  resultados: Manga[] = this.mangaService.obtenerTodos();
 
   alBuscar(texto: string) {
     this.resultados = this.mangaService.buscar(texto);
