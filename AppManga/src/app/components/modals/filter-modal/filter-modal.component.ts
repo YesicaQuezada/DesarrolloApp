@@ -1,13 +1,19 @@
-import { Component, Input, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
-import { FilterService } from '../../../services/api/filter.service';
 import {
-  JikanGenre,
-  FilterSelection,
-  MANGA_STATUS,
   ANIME_STATUS,
+  FilterSelection,
+  JikanGenre,
+  MANGA_STATUS,
 } from '../../../models/filters/filter.model';
+import { FilterService } from '../../../services/api/filter.service';
 
 @Component({
   selector: 'app-filter-modal',
