@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { JikanMangaResponse } from '../../models/manga/manga.model';
-import { FilterSelection } from '../../models/filters/filter.model';
+import { JikanMangaResponse } from '../../interfaces/manga-response/manga-response.interface';
+import { FilterSelection } from '../../interfaces/common/filter-selection/filter-selection.interface';
 
 @Injectable({ providedIn: 'root' })
 export class MangaService {

@@ -7,12 +7,9 @@ import {
 } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
-import {
-  ANIME_STATUS,
-  FilterSelection,
-  JikanGenre,
-  MANGA_STATUS,
-} from '../../../models/filters/filter.model';
+import { ANIME_STATUS, MANGA_STATUS } from '../../../models/filters/filter.model';
+import { FilterSelection } from '../../../interfaces/common/filter-selection/filter-selection.interface';
+import { JikanGenre } from '../../../interfaces/common/jikan-genre/jikan-genre.interface';
 import { FilterService } from '../../../services/api/filter.service';
 
 @Component({

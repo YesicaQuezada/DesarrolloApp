@@ -1,4 +1,4 @@
-import { JikanImages } from '../manga/manga.model';
+import { JikanImages } from '../../interfaces/common/jikan-images/jikan-images.interface';
 
 export interface AnimeModel {
   mal_id: number;
@@ -10,18 +10,4 @@ export interface AnimeModel {
   type: string;
   episodes: number | null;
   synopsis: string | null;
-}
-
-export interface JikanAnimeResponse {
-  data: AnimeModel[];
-  pagination: {
-    last_visible_page: number;
-    has_next_page: boolean;
-    current_page: number;
-    items: {
-      count: number;
-      total: number;
-      per_page: number;
-    };
-  };
 }

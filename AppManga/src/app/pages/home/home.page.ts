@@ -7,7 +7,7 @@ import { AnimeService } from '../../services/api/anime.service';
 import { MangaModel } from '../../models/manga/manga.model';
 import { AnimeModel } from '../../models/anime/anime.model';
 import { FilterModalComponent } from '../../components/modals/filter-modal/filter-modal.component';
-import { FilterSelection } from '../../models/filters/filter.model';
+import { FilterSelection } from '../../interfaces/common/filter-selection/filter-selection.interface';
 
 type Segment = 'manga' | 'anime';
 

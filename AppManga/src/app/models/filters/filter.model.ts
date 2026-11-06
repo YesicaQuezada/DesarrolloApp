@@ -1,15 +1,3 @@
-export interface JikanGenre {
-  mal_id: number;
-  name: string;
-  count: number;
-}
-
-export interface FilterSelection {
-  genreId: number | null;
-  demographicId: number | null;
-  status: string | null;
-}
-
 export const MANGA_STATUS = [
   { value: 'publishing', label: 'En publicación' },
   { value: 'complete', label: 'Finalizado' },

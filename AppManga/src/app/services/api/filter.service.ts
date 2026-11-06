@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import { JikanGenre } from '../../models/filters/filter.model';
+import { JikanGenre } from '../../interfaces/common/jikan-genre/jikan-genre.interface';
 
 interface CacheEntry<T> {
   data: T;

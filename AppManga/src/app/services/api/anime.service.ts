@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { JikanAnimeResponse } from '../../models/anime/anime.model';
-import { FilterSelection } from '../../models/filters/filter.model';
+import { JikanAnimeResponse } from '../../interfaces/anime-response/anime-response.interface';
+import { FilterSelection } from '../../interfaces/common/filter-selection/filter-selection.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AnimeService {
