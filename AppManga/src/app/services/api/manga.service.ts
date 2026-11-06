@@ -37,4 +37,19 @@ export class MangaService {
       params,
     });
   }
+
+  /**
+   * @function buscarManga
+   * @description Busca mangas por texto libre en la API de Jikan (param q)
+   */
+  buscarManga(texto: string, limit: number = 20): Observable<JikanMangaResponse> {
+    const params = new HttpParams()
+      .set('q', texto)
+      .set('limit', limit.toString());
+
+    return this.http.get<JikanMangaResponse>(this.baseUrl, {
+      headers: this.headers,
+      params,
+    });
+  }
 }
