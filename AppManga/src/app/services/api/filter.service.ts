@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
@@ -17,25 +17,16 @@ export class FilterService {
 
   private http = inject(HttpClient);
 
-  private get headers(): HttpHeaders {
-    return new HttpHeaders({
-      'CF-Access-Client-Id': environment.cfAccessClientId,
-      'CF-Access-Client-Secret': environment.cfAccessClientSecret,
-    });
-  }
-
   getGenres(type: 'manga' | 'anime'): Observable<JikanGenre[]> {
     return this.fetchWithCache<JikanGenre[]>(`genres_${type}`, () =>
-      this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`, {
-        headers: this.headers,
-      }).pipe(map((res) => res.data))
+      this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`)
+        .pipe(map((res) => res.data))
     );
   }
 
   getDemographics(type: 'manga' | 'anime'): Observable<JikanGenre[]> {
     return this.fetchWithCache<JikanGenre[]>(`demographics_${type}`, () =>
       this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`, {
-        headers: this.headers,
         params: new HttpParams().set('filter', 'demographics'),
       }).pipe(map((res) => res.data))
     );

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -11,13 +11,6 @@ export class AnimeService {
   private readonly baseUrl = `${environment.apiUrl}/v4/anime`;
 
   private http = inject(HttpClient);
-
-  private get headers(): HttpHeaders {
-    return new HttpHeaders({
-      'CF-Access-Client-Id': environment.cfAccessClientId,
-      'CF-Access-Client-Secret': environment.cfAccessClientSecret,
-    });
-  }
 
   getAnimeList(
     page: number = 1,
@@ -32,9 +25,6 @@ export class AnimeService {
     if (filters?.demographicId) params = params.set('demographics', filters.demographicId.toString());
     if (filters?.status) params = params.set('status', filters.status);
 
-    return this.http.get<JikanAnimeResponse>(this.baseUrl, {
-      headers: this.headers,
-      params,
-    });
+    return this.http.get<JikanAnimeResponse>(this.baseUrl, { params });
   }
 }
