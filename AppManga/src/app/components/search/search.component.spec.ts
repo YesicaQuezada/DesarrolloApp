@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { SearchComponent } from './search.component';
@@ -10,7 +11,7 @@ describe('SearchComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SearchComponent],
-      imports: [IonicModule.forRoot()],
+      imports: [FormsModule, IonicModule.forRoot()],
     });
 
     fixture = TestBed.createComponent(SearchComponent);
