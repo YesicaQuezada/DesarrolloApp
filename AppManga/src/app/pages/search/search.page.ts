@@ -1,8 +1,14 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { addIcons } from 'ionicons';
+import { heart, heartOutline } from 'ionicons/icons';
 
 import { MangaService } from '../../services/api/manga.service';
 import { MangaModel } from '../../models/manga/manga.model';
+import {
+  FavoritesService,
+  SinSesionError,
+} from '../../services/favorites/favorites.service';
 
 @Component({
   selector: 'app-search-page',
@@ -12,11 +18,18 @@ import { MangaModel } from '../../models/manga/manga.model';
 })
 export class SearchPage implements OnInit, OnDestroy {
   private mangaService = inject(MangaService);
+  private favoritosService = inject(FavoritesService);
   private busquedaSub?: Subscription;
 
   resultados: MangaModel[] = [];
+  /** mal_id de los resultados que ya están marcados como favoritos. */
+  favoritos = new Set<number>();
   loading = false;
   error = '';
+
+  constructor() {
+    addIcons({ heart, heartOutline });
+  }
 
   ngOnInit(): void {
     this.buscar('');
@@ -28,6 +41,38 @@ export class SearchPage implements OnInit, OnDestroy {
 
   alBuscar(texto: string): void {
     this.buscar(texto);
+  }
+
+  esFavorito(mediaId: number): boolean {
+    return this.favoritos.has(mediaId);
+  }
+
+  /**
+   * @function alternarFavorito
+   * @description Agrega o quita un resultado de la búsqueda de favoritos.
+   */
+  async alternarFavorito(manga: MangaModel): Promise<void> {
+    try {
+      if (this.favoritos.has(manga.mal_id)) {
+        await this.favoritosService.quitar('manga', manga.mal_id);
+        this.favoritos.delete(manga.mal_id);
+      } else {
+        await this.favoritosService.agregar({
+          mediaId: manga.mal_id,
+          type: 'manga',
+          title: manga.title,
+          image: manga.images.jpg.large_image_url,
+          addedAt: new Date(),
+        });
+        this.favoritos.add(manga.mal_id);
+      }
+    } catch (error) {
+      if (error instanceof SinSesionError) {
+        console.warn('Inicia sesión para guardar favoritos.');
+      } else {
+        console.error('Error al actualizar favorito:', error);
+      }
+    }
   }
 
   /**
@@ -48,11 +93,30 @@ export class SearchPage implements OnInit, OnDestroy {
       next: (respuesta) => {
         this.resultados = respuesta.data;
         this.loading = false;
+        this.marcarFavoritos();
       },
       error: () => {
         this.error = 'No se pudieron cargar los resultados.';
         this.loading = false;
       },
     });
+  }
+
+  /**
+   * @function marcarFavoritos
+   * @description Cruza los resultados con los favoritos guardados en Firestore.
+   * Si no hay sesión, se queda sin marcar (sin romper la búsqueda).
+   */
+  private async marcarFavoritos(): Promise<void> {
+    this.favoritos = new Set<number>();
+    try {
+      for (const m of this.resultados) {
+        if (await this.favoritosService.esFavorito('manga', m.mal_id)) {
+          this.favoritos.add(m.mal_id);
+        }
+      }
+    } catch {
+      // Sin sesión o sin red: no se marcan favoritos.
+    }
   }
 }

@@ -35,6 +35,22 @@
               }
             </p>
           </ion-label>
+          <button
+            type="button"
+            slot="end"
+            class="resultado__fav"
+            [class.resultado__fav--activa]="esFavorito(m.mal_id)"
+            [attr.aria-label]="
+              esFavorito(m.mal_id)
+                ? 'Quitar de favoritos'
+                : 'Agregar a favoritos'
+            "
+            (click)="alternarFavorito(m)"
+          >
+            <ion-icon
+              [name]="esFavorito(m.mal_id) ? 'heart' : 'heart-outline'"
+            ></ion-icon>
+          </button>
         </ion-item>
       }
     </ion-list>

@@ -54,3 +54,28 @@ ion-item:hover ion-label h2 {
 ion-thumbnail img {
   border-radius: 8px;
 }
+
+/* Botón de favorito en cada resultado */
+.resultado__fav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #7a8a96;
+  cursor: pointer;
+  font-size: 1.3rem;
+
+  ion-icon {
+    font-size: 1.3rem;
+    pointer-events: none;
+  }
+
+  &--activa {
+    color: var(--ion-color-danger, #eb445a);
+  }
+}
