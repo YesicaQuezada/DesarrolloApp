@@ -12,18 +12,7 @@ import {
 import { getCurrentUser } from 'aws-amplify/auth';
 
 import { firebaseApp } from '../../config/firebase/firebase';
-
-/** Tipo de medio favorito, alineado con los segmentos de la UI. */
-export type FavoritoTipo = 'anime' | 'manga';
-
-/** Documento guardado en users/{uid}/favorites/{tipo}_{malId}. */
-export interface Favorito {
-  mediaId: number;
-  type: FavoritoTipo;
-  title: string;
-  image: string;
-  addedAt: Date;
-}
+import { Favorito, FavoritoTipo } from '../../models/favorito/favorito.model';
 
 /** Error controlado: no hay sesión de Cognito activa. */
 export class SinSesionError extends Error {
@@ -67,8 +56,8 @@ export class FavoritesService {
     const snap = await getDocs(collection(this.db, 'users', uid, 'favorites'));
 
     return snap.docs
-      .map((d) => d.data() as Favorito)
-      .filter((f) => f.type === tipo)
+      .map((d) => Favorito.fromFirestore(d.data()))
+      .filter((f): f is Favorito => f !== null && f.type === tipo)
       .sort((a, b) => a.title.localeCompare(b.title));
   }
 
@@ -88,11 +77,7 @@ export class FavoritesService {
    */
   async agregar(favorito: Favorito): Promise<void> {
     const uid = await this.uidActual();
-    const { addedAt, ...datos } = favorito;
-    await setDoc(this.favRef(uid, favorito.type, favorito.mediaId), {
-      ...datos,
-      addedAt: addedAt.toISOString(),
-    });
+    await setDoc(this.favRef(uid, favorito.type, favorito.mediaId), favorito.toJSON());
   }
 
   /**

@@ -9,6 +9,7 @@ import {
   FavoritesService,
   SinSesionError,
 } from '../../services/favorites/favorites.service';
+import { Favorito } from '../../models/favorito/favorito.model';
 
 @Component({
   selector: 'app-search-page',
@@ -58,13 +59,15 @@ export class SearchPage implements OnInit, OnDestroy {
         await this.favoritosService.quitar('manga', manga.mal_id);
         this.favoritos.delete(manga.mal_id);
       } else {
-        await this.favoritosService.agregar({
-          mediaId: manga.mal_id,
-          type: 'manga',
-          title: manga.title,
-          image: manga.images.jpg.large_image_url,
-          addedAt: new Date(),
-        });
+        await this.favoritosService.agregar(
+          new Favorito({
+            mediaId: manga.mal_id,
+            type: 'manga',
+            title: manga.title,
+            image: manga.images.jpg.large_image_url,
+            addedAt: new Date(),
+          })
+        );
         this.favoritos.add(manga.mal_id);
       }
     } catch (error) {
@@ -94,7 +97,7 @@ export class SearchPage implements OnInit, OnDestroy {
 
     this.busquedaSub = peticion.subscribe({
       next: (respuesta) => {
-        this.resultados = respuesta.data;
+        this.resultados = MangaModel.fromJSONArray(respuesta.data);
         this.loading = false;
         // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
         this.cdr.markForCheck();

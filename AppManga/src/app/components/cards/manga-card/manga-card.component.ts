@@ -15,6 +15,7 @@ import {
   FavoritesService,
   SinSesionError,
 } from '../../../services/favorites/favorites.service';
+import { Favorito } from '../../../models/favorito/favorito.model';
 
 @Component({
   selector: 'app-manga-card',
@@ -61,13 +62,15 @@ export class MangaCardComponent implements OnInit {
         await this.favoritos.quitar('manga', this.manga.mal_id);
         this.esFavorito = false;
       } else {
-        await this.favoritos.agregar({
-          mediaId: this.manga.mal_id,
-          type: 'manga',
-          title: this.manga.title,
-          image: this.manga.images.jpg.large_image_url,
-          addedAt: new Date(),
-        });
+        await this.favoritos.agregar(
+          new Favorito({
+            mediaId: this.manga.mal_id,
+            type: 'manga',
+            title: this.manga.title,
+            image: this.manga.images.jpg.large_image_url,
+            addedAt: new Date(),
+          })
+        );
         this.esFavorito = true;
       }
     } catch (error) {

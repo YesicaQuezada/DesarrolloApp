@@ -74,7 +74,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.mangaSub?.unsubscribe();
     this.mangaSub = this.mangaService.getMangaList(this.mangaPage, this.limit, this.mangaFilters).subscribe({
       next: (res) => {
-        const items = Array.isArray(res?.data) ? res.data : [];
+        const items = MangaModel.fromJSONArray(res?.data);
         this.mangas = [...this.mangas, ...items];
         this.mangaHasMore = res?.pagination?.has_next_page ?? false;
         this.mangaPage = (res?.pagination?.current_page ?? this.mangaPage) + 1;
@@ -120,7 +120,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.animeSub?.unsubscribe();
     this.animeSub = this.animeService.getAnimeList(this.animePage, this.limit, this.animeFilters).subscribe({
       next: (res) => {
-        const items = Array.isArray(res?.data) ? res.data : [];
+        const items = AnimeModel.fromJSONArray(res?.data);
         this.animes = [...this.animes, ...items];
         this.animeHasMore = res?.pagination?.has_next_page ?? false;
         this.animePage = (res?.pagination?.current_page ?? this.animePage) + 1;

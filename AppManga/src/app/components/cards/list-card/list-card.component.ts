@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { addIcons } from 'ionicons';
 import { trashBin } from 'ionicons/icons';
 
-import { Favorito } from '../../../services/favorites/favorites.service';
+import { Favorito } from '../../../models/favorito/favorito.model';
 
 @Component({
   selector: 'app-list-card',

@@ -1,11 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 
-import {
-  Favorito,
-  FavoritoTipo,
-  FavoritesService,
-  SinSesionError,
-} from '../../../services/favorites/favorites.service';
+import { FavoritesService, SinSesionError } from '../../../services/favorites/favorites.service';
+import { Favorito, FavoritoTipo } from '../../../models/favorito/favorito.model';
 
 @Component({
   selector: 'app-segment',
