@@ -22,6 +22,9 @@ export class RecordPage implements OnInit {
 
   /**
    * @function onSignUp
+   * @param nickname - Apodo del usuario
+   * @param email - Correo electrónico del usuario
+   * @param password - Contraseña del usuario
    * @description Registra un nuevo usuario en AWS Cognito enviando sus credenciales y apodo
    */
 
@@ -52,6 +55,7 @@ export class RecordPage implements OnInit {
 
   /**
    * @function onConfirmSignUp
+   * @param confirmationCode - Código de confirmación enviado al correo del usuario
    * @description Valida el código numérico en la nube para activar la cuenta definitivamente
    */
 
@@ -76,6 +80,7 @@ export class RecordPage implements OnInit {
 
   /**
    * @function goToLogin
+   * @param event - Evento de navegación
    * @description Redirige al usuario de vuelta a la pantalla de inicio de sesión
    */
 
