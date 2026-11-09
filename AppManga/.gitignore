@@ -87,3 +87,6 @@ Thumbs.db
 
 environment.ts
 proxy.conf.json
+
+# Angular
+.angular
