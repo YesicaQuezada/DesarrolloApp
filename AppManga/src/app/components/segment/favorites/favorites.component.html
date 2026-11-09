@@ -1,14 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-segment [(ngModel)]="segmentoActual" (ionChange)="cambiarSegmento($event)">
-      <ion-segment-button value="anime">
-        <ion-label>Anime</ion-label>
-      </ion-segment-button>
-
-      <ion-segment-button value="manga">
-        <ion-label>Manga</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <app-media-segment
+      [valor]="segmentoActual"
+      (valorChange)="cambiarSegmento($event)"
+    ></app-media-segment>
   </ion-toolbar>
 </ion-header>
 
@@ -23,6 +18,13 @@
       <p class="favoritos__mensaje">{{ error }}</p>
     </ion-text>
   } @else {
+    <app-pagination
+      [paginaActual]="paginaActual"
+      [totalPaginas]="totalPaginas"
+      [cargando]="loading"
+      (cambioPagina)="cambiarPagina($event)"
+    ></app-pagination>
+
     <app-list-card
       [titulo]="segmentoActual === 'anime' ? 'Mis animes' : 'Mis mangas'"
       [subTitulo]="
@@ -30,9 +32,16 @@
           ? 'La lista de mis animes favoritos en un solo lugar'
           : 'La lista de mis mangas favoritos en un solo lugar'
       "
-      [items]="items"
+      [items]="itemsVisibles"
       [loading]="loading"
       (quitarItem)="quitar($event)"
     ></app-list-card>
+
+    <app-pagination
+      [paginaActual]="paginaActual"
+      [totalPaginas]="totalPaginas"
+      [cargando]="loading"
+      (cambioPagina)="cambiarPagina($event)"
+    ></app-pagination>
   }
 </ion-content>

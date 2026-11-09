@@ -1,0 +1,44 @@
+@if (!oculto) {
+  <nav class="paginacion" aria-label="Paginación">
+    <ion-button
+      class="paginacion__flecha"
+      fill="outline"
+      size="small"
+      [disabled]="!puedeRetroceder"
+      aria-label="Página anterior"
+      (click)="irA(paginaActual - 1)"
+    >
+      <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+
+    @for (entrada of paginasVisibles(); track entrada) {
+      @if (entrada === '…') {
+        <span class="paginacion__puntos" aria-hidden="true">…</span>
+      } @else {
+        <ion-button
+          class="paginacion__pagina"
+          size="small"
+          [fill]="entrada === paginaActual ? 'solid' : 'outline'"
+          [color]="entrada === paginaActual ? 'primary' : 'medium'"
+          [disabled]="cargando"
+          [attr.aria-current]="entrada === paginaActual ? 'page' : null"
+          [attr.aria-label]="'Ir a la página ' + entrada"
+          (click)="irA(entrada)"
+        >
+          {{ entrada }}
+        </ion-button>
+      }
+    }
+
+    <ion-button
+      class="paginacion__flecha"
+      fill="outline"
+      size="small"
+      [disabled]="!puedeAvanzar"
+      aria-label="Página siguiente"
+      (click)="irA(paginaActual + 1)"
+    >
+      <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+    </ion-button>
+  </nav>
+}

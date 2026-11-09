@@ -27,4 +27,16 @@ export class AnimeService {
 
     return this.http.get<JikanAnimeResponse>(this.baseUrl, { params });
   }
+
+  /**
+   * @function buscarAnime
+   * @description Busca animes por texto libre en la API de Jikan (param q)
+   */
+  buscarAnime(texto: string, limit: number = 20): Observable<JikanAnimeResponse> {
+    const params = new HttpParams()
+      .set('q', texto)
+      .set('limit', limit.toString());
+
+    return this.http.get<JikanAnimeResponse>(this.baseUrl, { params });
+  }
 }

@@ -3,14 +3,10 @@
     <ion-title>Mi Biblioteca</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment [value]="segment" (ionChange)="onSegmentChange($event)">
-      <ion-segment-button value="manga">
-        <ion-label>Mangas</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="anime">
-        <ion-label>Animes</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <app-media-segment
+      [valor]="segment"
+      (valorChange)="onSegmentChange($event)"
+    ></app-media-segment>
   </ion-toolbar>
 </ion-header>
 
@@ -32,6 +28,13 @@
     }
 
     @if (mangas.length > 0) {
+      <app-pagination
+        [paginaActual]="mangaPage"
+        [totalPaginas]="mangaTotalPaginas"
+        [cargando]="mangaLoading"
+        (cambioPagina)="cambiarPaginaManga($event)"
+      ></app-pagination>
+
       <ion-grid class="manga-grid">
         <ion-row>
           @for (manga of mangas; track manga.mal_id) {
@@ -41,11 +44,14 @@
           }
         </ion-row>
       </ion-grid>
-    }
 
-    <ion-infinite-scroll [disabled]="!mangaHasMore" (ionInfinite)="loadMangas($event)">
-      <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más mangas..."></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+      <app-pagination
+        [paginaActual]="mangaPage"
+        [totalPaginas]="mangaTotalPaginas"
+        [cargando]="mangaLoading"
+        (cambioPagina)="cambiarPaginaManga($event)"
+      ></app-pagination>
+    }
   }
 
   <!-- ================= ANIME ================= -->
@@ -65,6 +71,13 @@
     }
 
     @if (animes.length > 0) {
+      <app-pagination
+        [paginaActual]="animePage"
+        [totalPaginas]="animeTotalPaginas"
+        [cargando]="animeLoading"
+        (cambioPagina)="cambiarPaginaAnime($event)"
+      ></app-pagination>
+
       <ion-grid class="manga-grid">
         <ion-row>
           @for (anime of animes; track anime.mal_id) {
@@ -74,11 +87,14 @@
           }
         </ion-row>
       </ion-grid>
-    }
 
-    <ion-infinite-scroll [disabled]="!animeHasMore" (ionInfinite)="loadAnimes($event)">
-      <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más animes..."></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+      <app-pagination
+        [paginaActual]="animePage"
+        [totalPaginas]="animeTotalPaginas"
+        [cargando]="animeLoading"
+        (cambioPagina)="cambiarPaginaAnime($event)"
+      ></app-pagination>
+    }
   }
 
   <!-- FAB de filtros -->

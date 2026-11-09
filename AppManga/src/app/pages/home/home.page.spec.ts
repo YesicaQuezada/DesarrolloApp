@@ -2,7 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { HomePage } from './home.page';
-import { ComponentsModule } from '../../components/components.module';
+import { AnimeCardComponent } from '../../components/cards/anime-card/anime-card.component';
+import { MangaCardComponent } from '../../components/cards/manga-card/manga-card.component';
+import { MediaSegmentComponent } from '../../components/media-segment/media-segment.component';
+import { PaginationComponent } from '../../components/pagination/pagination.component';
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -10,11 +13,20 @@ describe('HomePage', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [HomePage],
-      // Replicamos home.module + ComponentsModule para que la plantilla
-      // resuelva ion-*, app-manga-card, app-anime-card y ngIf/ngFor.
+      // Replicamos home.module: declara HomePage y todos los componentes
+      // custom que usa la plantilla. No importamos ComponentsModule porque
+      // ngtsc omite ɵɵsetNgModuleScope (supportJitMode: false) y su scope
+      // está vacío en runtime: el TestBed resuelve por declarations, igual
+      // que ListCardComponent en favorites.component.spec.
+      declarations: [
+        HomePage,
+        MediaSegmentComponent,
+        PaginationComponent,
+        MangaCardComponent,
+        AnimeCardComponent,
+      ],
       // IonicModule además provee ModalController (que inyecta HomePage).
-      imports: [IonicModule.forRoot(), ComponentsModule],
+      imports: [IonicModule.forRoot()],
     });
 
     fixture = TestBed.createComponent(HomePage);

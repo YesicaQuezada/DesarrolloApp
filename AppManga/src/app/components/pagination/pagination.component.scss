@@ -1,0 +1,26 @@
+/* Paginación numerada: fila centrada con botones compactos. */
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+
+  ion-button {
+    --padding-start: 10px;
+    --padding-end: 10px;
+    min-width: 36px;
+    margin: 0;
+  }
+
+  &__puntos {
+    padding: 0 2px;
+    color: #7a8a96;
+    user-select: none;
+  }
+
+  &__flecha {
+    min-width: 36px;
+  }
+}

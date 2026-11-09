@@ -6,6 +6,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { FavoriteComponent } from './favorites.component';
 import { ListCardComponent } from '../../cards/list-card/list-card.component';
+import { MediaSegmentComponent } from '../../media-segment/media-segment.component';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 describe('FavoriteComponent', () => {
   let component: FavoriteComponent;
@@ -13,10 +15,19 @@ describe('FavoriteComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      // Replicamos favorites.module: declara FavoriteComponent y ListCardComponent
+      // Replicamos favorites.module: declara FavoriteComponent, ListCardComponent
+      // y los componentes custom de la plantilla (segmento y paginación).
+      // No importamos ComponentsModule porque ngtsc omite ɵɵsetNgModuleScope
+      // (supportJitMode: false): su scope está vacío en runtime y el TestBed
+      // solo resuelve por declarations.
       // e importa CommonModule, FormsModule, IonicModule y RouterModule
       // (el template usa routerLink para ir a /login).
-      declarations: [FavoriteComponent, ListCardComponent],
+      declarations: [
+        FavoriteComponent,
+        ListCardComponent,
+        MediaSegmentComponent,
+        PaginationComponent,
+      ],
       imports: [
         IonicModule.forRoot(),
         FormsModule,

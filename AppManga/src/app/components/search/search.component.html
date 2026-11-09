@@ -1,17 +1,12 @@
 <ion-toolbar>
-  <ion-segment [(ngModel)]="segmentoActual">
-    <ion-segment-button value="anime">
-      <ion-label>Anime</ion-label>
-    </ion-segment-button>
-
-    <ion-segment-button value="manga">
-      <ion-label>Manga</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+  <app-media-segment
+    [valor]="tipo"
+    (valorChange)="alCambiarSegmento($event)"
+  ></app-media-segment>
 </ion-toolbar>
 
 <ion-searchbar
-  [placeholder]="segmentoActual === 'anime' ? 'Buscar anime' : 'Buscar manga, autor o género'"
+  [placeholder]="tipo === 'anime' ? 'Buscar anime' : 'Buscar manga, autor o género'"
   [debounce]="300"
   show-clear-button="always"
   clear-icon="trash-bin"
