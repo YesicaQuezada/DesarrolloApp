@@ -1,55 +1,106 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>Mi Biblioteca de Mangas</ion-title>
+    <ion-title>Mi Biblioteca</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <app-media-segment
+      [valor]="segment"
+      (valorChange)="onSegmentChange($event)"
+    ></app-media-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <section class="welcome">
-    <h2>¡Hola de nuevo!</h2>
-    <p>Descubre mangas para sumar a tu biblioteca.</p>
-  </section>
-
-  <section class="manga-section">
-    <div class="section-heading">
-      <div>
-        <h2>Mangas populares</h2>
-        <p>Una selección para empezar a explorar</p>
+<ion-content [fullscreen]="true">
+  <!-- ================= MANGA ================= -->
+  @if (segment === 'manga') {
+    @if (mangaError) {
+      <div class="empty-state">
+        <ion-text color="danger"><p>{{ mangaError }}</p></ion-text>
+        <ion-button fill="outline" (click)="retryMangas()">Reintentar</ion-button>
       </div>
-    </div>
+    }
 
-    <div class="loading-state" *ngIf="isLoading()">
-      <ion-spinner name="crescent" aria-label="Cargando mangas"></ion-spinner>
-      <span>Cargando mangas...</span>
-    </div>
+    @if (mangaLoading && mangas.length === 0) {
+      <div class="loading-state">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando mangas...</p>
+      </div>
+    }
 
-    <div class="error-state" *ngIf="errorMessage() as error">
-      <p>{{ error }}</p>
-      <ion-button fill="outline" size="small" (click)="loadMangas()">Reintentar</ion-button>
-    </div>
+    @if (mangas.length > 0) {
+      <app-pagination
+        [paginaActual]="mangaPage"
+        [totalPaginas]="mangaTotalPaginas"
+        [cargando]="mangaLoading"
+        (cambioPagina)="cambiarPaginaManga($event)"
+      ></app-pagination>
 
-    <ion-grid class="manga-grid" *ngIf="!isLoading() && mangas().length">
-      <ion-row>
-        <ion-col size="6" size-sm="4" size-md="3" size-lg="2" *ngFor="let manga of mangas()">
-          <ion-card class="manga-card">
-            <img
-              *ngIf="getCoverImage(manga) as coverImage"
-              [src]="coverImage"
-              [alt]="'Portada de ' + manga.title"
-              loading="lazy"
-            />
-            <div class="cover-placeholder" *ngIf="!getCoverImage(manga)">Sin portada</div>
-            <ion-card-header>
-              <ion-card-title>{{ manga.title }}</ion-card-title>
-              <ion-card-subtitle *ngIf="manga.score">★ {{ manga.score }}</ion-card-subtitle>
-            </ion-card-header>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+      <ion-grid class="manga-grid">
+        <ion-row>
+          @for (manga of mangas; track manga.mal_id) {
+            <ion-col size="6" size-md="4" size-lg="3">
+              <app-manga-card [manga]="manga" (cardClick)="onMangaClick($event)"></app-manga-card>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
 
-    <p class="empty-state" *ngIf="!isLoading() && !errorMessage() && mangas().length === 0">
-      No se encontraron mangas.
-    </p>
-  </section>
+      <app-pagination
+        [paginaActual]="mangaPage"
+        [totalPaginas]="mangaTotalPaginas"
+        [cargando]="mangaLoading"
+        (cambioPagina)="cambiarPaginaManga($event)"
+      ></app-pagination>
+    }
+  }
+
+  <!-- ================= ANIME ================= -->
+  @if (segment === 'anime') {
+    @if (animeError) {
+      <div class="empty-state">
+        <ion-text color="danger"><p>{{ animeError }}</p></ion-text>
+        <ion-button fill="outline" (click)="retryAnimes()">Reintentar</ion-button>
+      </div>
+    }
+
+    @if (animeLoading && animes.length === 0) {
+      <div class="loading-state">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando animes...</p>
+      </div>
+    }
+
+    @if (animes.length > 0) {
+      <app-pagination
+        [paginaActual]="animePage"
+        [totalPaginas]="animeTotalPaginas"
+        [cargando]="animeLoading"
+        (cambioPagina)="cambiarPaginaAnime($event)"
+      ></app-pagination>
+
+      <ion-grid class="manga-grid">
+        <ion-row>
+          @for (anime of animes; track anime.mal_id) {
+            <ion-col size="6" size-md="4" size-lg="3">
+              <app-anime-card [anime]="anime" (cardClick)="onAnimeClick($event)"></app-anime-card>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+
+      <app-pagination
+        [paginaActual]="animePage"
+        [totalPaginas]="animeTotalPaginas"
+        [cargando]="animeLoading"
+        (cambioPagina)="cambiarPaginaAnime($event)"
+      ></app-pagination>
+    }
+  }
+
+  <!-- FAB de filtros -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="openFilterModal()">
+      <ion-icon name="funnel-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

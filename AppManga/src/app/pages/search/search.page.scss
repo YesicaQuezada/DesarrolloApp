@@ -1,22 +1,81 @@
-.manga-card {
-	height: 100%;
-	margin: 0;
+/* Encabezado celeste */
+ion-toolbar {
+  --background: #5bb8ea;
+  --color: #ffffff;
 }
 
-.manga-card img,
-.cover-placeholder {
-	width: 100%;
-	height: 240px;
-	object-fit: cover;
+/* Fondo gris claro */
+ion-content {
+  --background: #eef2f5;
 }
 
-.cover-placeholder {
-	display: grid;
-	place-items: center;
-	background: var(--ion-color-light);
-	color: var(--ion-color-medium);
+/* Lista transparente con un poco de aire */
+ion-list {
+  background: transparent;
+  padding: 8px 12px;
 }
 
-ion-card-title {
-	font-size: 0.95rem;
+/* Cada manga como una tarjeta blanca */
+ion-item {
+  --background: #ffffff;
+  --inner-border-width: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+ion-item::part(native) {
+  transition: background-color 0.25s ease;
+}
+
+/* Al pasar el mouse: se pone celeste y sube un poquito */
+ion-item:hover {
+  --background: #d9f0fc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(91, 184, 234, 0.35);
+}
+
+ion-label h2 {
+  color: #2b3a45;
+  font-weight: 600;
+}
+
+ion-label p {
+  color: #7a8a96;
+}
+
+ion-item:hover ion-label h2 {
+  color: #1581b8;
+}
+
+ion-thumbnail img {
+  border-radius: 8px;
+}
+
+/* Botón de favorito en cada resultado */
+.resultado__fav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #7a8a96;
+  cursor: pointer;
+  font-size: 1.3rem;
+
+  ion-icon {
+    font-size: 1.3rem;
+    pointer-events: none;
+  }
+
+  &--activa {
+    color: var(--ion-color-danger, #eb445a);
+  }
 }

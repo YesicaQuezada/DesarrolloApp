@@ -1,12 +1,12 @@
-export interface JikanGenre {
-  mal_id: number;
-  name: string;
-  url: string;
-  count?: number;
-}
+export const MANGA_STATUS = [
+  { value: 'publishing', label: 'En publicación' },
+  { value: 'complete', label: 'Finalizado' },
+  { value: 'hiatus', label: 'En pausa' },
+  { value: 'discontinued', label: 'Descontinuado' },
+] as const;
 
-export interface FilterSelection {
-  genreId?: number;
-  demographicId?: number;
-  status?: string;
-}
+export const ANIME_STATUS = [
+  { value: 'airing', label: 'En emisión' },
+  { value: 'complete', label: 'Completo' },
+  { value: 'upcoming', label: 'Próximamente' },
+] as const;

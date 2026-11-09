@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { JikanMangaResponse } from '../../models/manga/manga.model';
-import { FilterSelection } from '../../models/filters/filter.model';
+import { JikanMangaResponse } from '../../interfaces/manga-response/manga-response.interface';
+import { FilterSelection } from '../../interfaces/common/filter-selection/filter-selection.interface';
 
 @Injectable({ providedIn: 'root' })
 export class MangaService {
   private readonly baseUrl = `${environment.apiUrl}/v4/manga`;
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getMangaList(
     page: number = 1,
@@ -25,8 +25,18 @@ export class MangaService {
     if (filters?.demographicId) params = params.set('demographics', filters.demographicId.toString());
     if (filters?.status) params = params.set('status', filters.status);
 
-    return this.http.get<JikanMangaResponse>(this.baseUrl, {
-      params,
-    });
+    return this.http.get<JikanMangaResponse>(this.baseUrl, { params });
+  }
+
+  /**
+   * @function buscarManga
+   * @description Busca mangas por texto libre en la API de Jikan (param q)
+   */
+  buscarManga(texto: string, limit: number = 20): Observable<JikanMangaResponse> {
+    const params = new HttpParams()
+      .set('q', texto)
+      .set('limit', limit.toString());
+
+    return this.http.get<JikanMangaResponse>(this.baseUrl, { params });
   }
 }

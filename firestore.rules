@@ -1,0 +1,45 @@
+rules_version = '2';
+
+// Reglas de Firestore para AppManga — proyecto Firebase "test-2370".
+//
+// Estructura de datos:
+//   users/{uid}/favorites/{tipo}_{malId}
+//   donde {uid} es el "sub" de Cognito (identidad del usuario).
+//
+// ---------------------------------------------------------------------------
+// IMPORTANTE — léelo antes de aplicar:
+//
+// La app se autentica con Cognito (AWS Amplify) y NO inicia sesión en
+// Firebase Auth, por lo que request.auth queda en NULL en toda lectura y
+// escritura. Por eso hay dos opciones: elegí una y borrá la otra.
+//
+// OPCIÓN A (activa abajo) — demo / presentación:
+//   Acceso abierto. Funciona hoy tal cual, pero CUALQUIERA con la URL del
+//   proyecto puede leer/escribir. No usar en producción.
+//
+// OPCIÓN B (comentada) — producción:
+//   Exige Firebase Auth. Requiere que la app llame a
+//   signInWithCustomToken() con un token emitido por Cognito, de modo que
+//   request.auth.uid coincida con el "sub" usado en la ruta users/{uid}.
+// ---------------------------------------------------------------------------
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // OPCIÓN A — demo (acceso abierto, sin autenticación de Firebase).
+    match /users/{uid} {
+      allow read, write: if true;
+    }
+
+    // OPCIÓN B — producción (descomentar y borrar la OPCIÓN A).
+    // Requiere Firebase Auth con uid == sub de Cognito.
+    //
+    // match /users/{uid} {
+    //   allow read, write: if request.auth != null && request.auth.uid == uid;
+    // }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

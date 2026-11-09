@@ -13,6 +13,7 @@ $RECYCLE.BIN/
 log.txt
 
 
+
 /.sourcemaps
 /.versions
 /coverage
@@ -83,3 +84,9 @@ Thumbs.db
 
 # TypeScript incremental build files
 *.tsbuildinfo
+
+environment.ts
+proxy.conf.json
+
+# Angular
+.angular

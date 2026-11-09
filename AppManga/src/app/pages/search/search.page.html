@@ -1,39 +1,64 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Mangas</ion-title>
+    <ion-title>Buscar</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-spinner *ngIf="isLoading()" name="crescent" aria-label="Cargando mangas"></ion-spinner>
+<ion-content [fullscreen]="true">
+  <app-search (buscar)="alBuscar($event)"></app-search>
 
-  <ion-text color="danger" *ngIf="errorMessage() as error">
-    <p>{{ error }}</p>
-  </ion-text>
+  @if (loading) {
+    <div class="ion-text-center ion-padding">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  }
 
-  <ion-grid *ngIf="!isLoading() && mangas().length">
-    <ion-row>
-      <ion-col size="6" size-md="4" size-lg="3" *ngFor="let manga of mangas()">
-        <ion-card class="manga-card">
-          <img
-            *ngIf="getCoverImage(manga) as coverImage"
-            [src]="coverImage"
-            [alt]="'Portada de ' + manga.title"
-            loading="lazy"
-          />
-          <div class="cover-placeholder" *ngIf="!getCoverImage(manga)">
-            Sin portada
-          </div>
-          <ion-card-header>
-            <ion-card-title>{{ manga.title }}</ion-card-title>
-            <ion-card-subtitle *ngIf="manga.score">Puntuación: {{ manga.score }}</ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  @if (error) {
+    <ion-text color="danger">
+      <p class="ion-text-center ion-padding">{{ error }}</p>
+    </ion-text>
+  }
 
-  <p *ngIf="!isLoading() && !errorMessage() && mangas().length === 0">
-    No se encontraron mangas.
-  </p>
+  @if (!loading && !error) {
+    <ion-list>
+      @for (m of resultados; track m.mal_id) {
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img [src]="m.images.jpg.image_url" [alt]="m.title" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ m.title }}</h2>
+            <p>
+              {{ m.type }} · {{ m.status }}
+              @if (m.score) {
+                · ⭐ {{ m.score }}
+              }
+            </p>
+          </ion-label>
+          <button
+            type="button"
+            slot="end"
+            class="resultado__fav"
+            [class.resultado__fav--activa]="esFavorito(m.mal_id)"
+            [attr.aria-label]="
+              esFavorito(m.mal_id)
+                ? 'Quitar de favoritos'
+                : 'Agregar a favoritos'
+            "
+            (click)="alternarFavorito(m)"
+          >
+            <ion-icon
+              [name]="esFavorito(m.mal_id) ? 'heart' : 'heart-outline'"
+            ></ion-icon>
+          </button>
+        </ion-item>
+      }
+    </ion-list>
+
+    @if (resultados.length === 0) {
+      <p class="ion-text-center ion-padding">
+        No se encontraron resultados.
+      </p>
+    }
+  }
 </ion-content>

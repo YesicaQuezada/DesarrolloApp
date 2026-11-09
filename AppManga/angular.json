@@ -19,7 +19,7 @@
             },
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -39,7 +39,9 @@
               "src/theme/variables.scss"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": ["@ionic/angular"]
+            "allowedCommonJsDependencies": [
+              "@ionic/angular"
+            ]
           },
           "configurations": {
             "production": {
@@ -79,7 +81,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": false,
-            "proxyConfig": "src/proxy.conf.json"
+            "proxyConfig": "config/proxy/proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -105,6 +107,7 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "buildTarget": "::development",
+            "runnerConfig": "config/test/vitest-base.config.ts",
             "setupFiles": [
               "src/test-setup.ts"
             ]

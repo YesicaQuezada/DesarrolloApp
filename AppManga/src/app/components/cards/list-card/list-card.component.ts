@@ -1,4 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { addIcons } from 'ionicons';
+import { trashBin } from 'ionicons/icons';
+
+import { Favorito } from '../../../models/favorito/favorito.model';
 
 @Component({
   selector: 'app-list-card',
@@ -6,7 +10,19 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['list-card.component.scss'],
   standalone: false,
 })
-export class ListCard {
+export class ListCardComponent {
   @Input() titulo: string = '';
   @Input() subTitulo: string = '';
+  @Input() items: Favorito[] = [];
+  @Input() loading: boolean = false;
+
+  @Output() quitarItem = new EventEmitter<Favorito>();
+
+  constructor() {
+    addIcons({ trashBin });
+  }
+
+  quitar(item: Favorito): void {
+    this.quitarItem.emit(item);
+  }
 }
