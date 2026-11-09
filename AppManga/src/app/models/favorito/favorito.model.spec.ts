@@ -38,7 +38,7 @@ describe('Favorito', () => {
     expect(favorito.title).toBe('Sin título');
   });
 
-  it('coacciona addedAt string ISO (el formato real guardado en Firestore) a Date', () => {
+  it('coacciona addedAt string ISO (el formato real guardado en la RTDB) a Date', () => {
     const favorito = new Favorito({
       mediaId: 1,
       type: 'manga',
@@ -63,7 +63,7 @@ describe('Favorito', () => {
     expect(favorito.addedAt.getTime()).toBe(0);
   });
 
-  it('toJSON devuelve el formato exacto de Firestore (addedAt como string ISO)', () => {
+  it('toJSON devuelve el formato exacto de la RTDB (addedAt como string ISO)', () => {
     const favorito = new Favorito({
       mediaId: 9,
       type: 'anime',
@@ -81,8 +81,8 @@ describe('Favorito', () => {
     });
   });
 
-  it('fromFirestore reconstruye el documento guardado', () => {
-    const favorito = Favorito.fromFirestore({
+  it('fromJSON reconstruye el registro guardado', () => {
+    const favorito = Favorito.fromJSON({
       mediaId: 5,
       type: 'manga',
       title: 'Berserk',
@@ -96,19 +96,19 @@ describe('Favorito', () => {
     expect(favorito?.addedAt).toBeInstanceOf(Date);
   });
 
-  it('fromFirestore descarta documentos corruptos (devuelve null)', () => {
-    expect(Favorito.fromFirestore(null)).toBeNull();
-    expect(Favorito.fromFirestore('texto')).toBeNull();
+  it('fromJSON descarta registros corruptos (devuelve null)', () => {
+    expect(Favorito.fromJSON(null)).toBeNull();
+    expect(Favorito.fromJSON('texto')).toBeNull();
     expect(
-      Favorito.fromFirestore({ mediaId: -1, type: 'manga', title: 'x', image: '' })
+      Favorito.fromJSON({ mediaId: -1, type: 'manga', title: 'x', image: '' })
     ).toBeNull();
     expect(
-      Favorito.fromFirestore({ mediaId: 3, type: 'serie', title: 'x', image: '' })
+      Favorito.fromJSON({ mediaId: 3, type: 'serie', title: 'x', image: '' })
     ).toBeNull();
   });
 
-  it('fromFirestore es tolerante con campos de presentación faltantes', () => {
-    const favorito = Favorito.fromFirestore({ mediaId: 3, type: 'manga' });
+  it('fromJSON es tolerante con campos de presentación faltantes', () => {
+    const favorito = Favorito.fromJSON({ mediaId: 3, type: 'manga' });
 
     expect(favorito).not.toBeNull();
     expect(favorito?.title).toBe('Sin título');

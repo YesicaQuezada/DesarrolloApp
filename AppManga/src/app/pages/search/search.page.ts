@@ -113,7 +113,7 @@ export class SearchPage implements OnInit, OnDestroy {
 
   /**
    * @function marcarFavoritos
-   * @description Cruza los resultados con los favoritos guardados en Firestore.
+   * @description Cruza los resultados con los favoritos guardados en la RTDB.
    * Si no hay sesión, se queda sin marcar (sin romper la búsqueda).
    */
   private async marcarFavoritos(): Promise<void> {

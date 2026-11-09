@@ -2,15 +2,16 @@
 export type FavoritoTipo = 'anime' | 'manga';
 
 /**
- * Modelo de dominio de un favorito guardado en Firestore
+ * Modelo de dominio de un favorito guardado en la Realtime Database
  * (`users/{uid}/favorites/{tipo}_{malId}`).
  *
  * - `mediaId` es identidad: solo tiene getter.
  * - `type` solo admite `'anime' | 'manga'`; un valor desconocido cae en
- *   `'manga'` al construir por código propio, y `fromFirestore()` prefiere
- *   **descartar** el documento (devuelve `null`) antes que guardarbasura.
- * - `addedAt` se coacciona a `Date` (acepta `Date`, string ISO o Timestamp de
- *   Firestore); si no es interpretable queda en epoch (1970) en vez de romper.
+ *   `'manga'` al construir por código propio, y `fromJSON()` prefiere
+ *   **descartar** el registro (devuelve `null`) antes que guardarbasura.
+ * - `addedAt` se coacciona a `Date` (acepta `Date` o string ISO — la forma en
+ *   que se persiste); si no es interpretable queda en epoch (1970) en vez de
+ *   romper.
  */
 export class Favorito {
   private _mediaId = 0;
@@ -69,9 +70,9 @@ export class Favorito {
     this._addedAt = Favorito.aFecha(valor);
   }
 
-  // ---------- Persistencia (Firestore) ----------
+  // ---------- Persistencia (Realtime Database) ----------
 
-  /** Forma exacta que se guarda en Firestore (addedAt como string ISO). */
+  /** Forma exacta que se guarda en la RTDB (addedAt como string ISO). */
   toJSON(): {
     mediaId: number;
     type: FavoritoTipo;
@@ -89,11 +90,11 @@ export class Favorito {
   }
 
   /**
-   * Reconstruye el favorito desde el documento de Firestore.
-   * Devuelve `null` (documento corrupto: se descarta) si no es un objeto, si
+   * Reconstruye el favorito desde el registro guardado en la RTDB.
+   * Devuelve `null` (registro corrupto: se descarta) si no es un objeto, si
    * `mediaId` no es un entero positivo o si `type` no es `'anime'|'manga'`.
    */
-  static fromFirestore(raw: unknown): Favorito | null {
+  static fromJSON(raw: unknown): Favorito | null {
     if (!Favorito.esObjeto(raw)) return null;
 
     const mediaId = raw['mediaId'];

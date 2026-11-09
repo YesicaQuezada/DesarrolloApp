@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        "favorites": {
+          ".read": true,
+          "$favId": {
+            ".write": true,
+            ".validate": "!newData.exists() || (newData.hasChildren(5) && newData.hasChildren(['mediaId', 'type', 'title', 'image', 'addedAt']) && newData.child('mediaId').isNumber() && newData.child('mediaId').val() > 0 && (newData.child('type').val() === 'anime' || newData.child('type').val() === 'manga') && newData.child('title').isString() && newData.child('title').val().length > 0 && newData.child('title').val().length <= 500 && newData.child('image').isString() && newData.child('image').val().length <= 2048 && newData.child('addedAt').isString() && $favId === newData.child('type').val() + '_' + string(newData.child('mediaId').val()))"
+          }
+        }
+      }
+    }
+  }
+}

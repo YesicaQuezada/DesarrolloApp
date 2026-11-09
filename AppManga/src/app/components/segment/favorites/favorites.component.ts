@@ -30,7 +30,7 @@ export class FavoriteComponent implements OnInit {
 
   /**
    * @function quitar
-   * @description Elimina un favorito de Firestore y lo saca de la lista.
+   * @description Elimina un favorito de la RTDB y lo saca de la lista.
    */
   async quitar(item: Favorito): Promise<void> {
     try {
@@ -49,7 +49,7 @@ export class FavoriteComponent implements OnInit {
 
   /**
    * @function cargar
-   * @description Lista los favoritos del segmento actual desde Firestore.
+   * @description Lista los favoritos del segmento actual desde la RTDB.
    */
   private async cargar(): Promise<void> {
     this.loading = true;

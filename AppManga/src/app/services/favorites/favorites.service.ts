@@ -1,14 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import {
-  Firestore,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  setDoc,
-} from 'firebase/firestore';
+  Database,
+  get,
+  getDatabase,
+  ref,
+  remove,
+  set,
+} from 'firebase/database';
 import { getCurrentUser } from 'aws-amplify/auth';
 
 import { firebaseApp } from '../../config/firebase/firebase';
@@ -24,7 +22,7 @@ export class SinSesionError extends Error {
 
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {
-  private readonly db: Firestore = getFirestore(firebaseApp);
+  private readonly db: Database = getDatabase(firebaseApp);
 
   /**
    * @function uidActual
@@ -42,9 +40,12 @@ export class FavoritesService {
     }
   }
 
+  /**
+   * Ruta determinista `users/{uid}/favorites/{tipo}_{mediaId}` → agregar y
+   * quitar son un set/remove sin duplicados.
+   */
   private favRef(uid: string, tipo: FavoritoTipo, mediaId: number) {
-    // Doc id determinista → agregar/quitar es un set/delete sin duplicados.
-    return doc(this.db, 'users', uid, 'favorites', `${tipo}_${mediaId}`);
+    return ref(this.db, `users/${uid}/favorites/${tipo}_${mediaId}`);
   }
 
   /**
@@ -53,12 +54,16 @@ export class FavoritesService {
    */
   async listar(tipo: FavoritoTipo): Promise<Favorito[]> {
     const uid = await this.uidActual();
-    const snap = await getDocs(collection(this.db, 'users', uid, 'favorites'));
+    const snap = await get(ref(this.db, `users/${uid}/favorites`));
 
-    return snap.docs
-      .map((d) => Favorito.fromFirestore(d.data()))
-      .filter((f): f is Favorito => f !== null && f.type === tipo)
-      .sort((a, b) => a.title.localeCompare(b.title));
+    const favoritos: Favorito[] = [];
+    // forEach recorre los hijos; si la rama no existe no se invoca y queda [].
+    snap.forEach((hijo) => {
+      const favorito = Favorito.fromJSON(hijo.val());
+      if (favorito !== null && favorito.type === tipo) favoritos.push(favorito);
+    });
+
+    return favoritos.sort((a, b) => a.title.localeCompare(b.title));
   }
 
   /**
@@ -67,7 +72,7 @@ export class FavoritesService {
    */
   async esFavorito(tipo: FavoritoTipo, mediaId: number): Promise<boolean> {
     const uid = await this.uidActual();
-    const snap = await getDoc(this.favRef(uid, tipo, mediaId));
+    const snap = await get(this.favRef(uid, tipo, mediaId));
     return snap.exists();
   }
 
@@ -77,7 +82,7 @@ export class FavoritesService {
    */
   async agregar(favorito: Favorito): Promise<void> {
     const uid = await this.uidActual();
-    await setDoc(this.favRef(uid, favorito.type, favorito.mediaId), favorito.toJSON());
+    await set(this.favRef(uid, favorito.type, favorito.mediaId), favorito.toJSON());
   }
 
   /**
@@ -86,6 +91,6 @@ export class FavoritesService {
    */
   async quitar(tipo: FavoritoTipo, mediaId: number): Promise<void> {
     const uid = await this.uidActual();
-    await deleteDoc(this.favRef(uid, tipo, mediaId));
+    await remove(this.favRef(uid, tipo, mediaId));
   }
 }
