@@ -81,7 +81,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": false,
-            "proxyConfig": "src/proxy.conf.json"
+            "proxyConfig": "config/proxy/proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -107,7 +107,7 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "buildTarget": "::development",
-            "runnerConfig": "vitest-base.config.ts",
+            "runnerConfig": "config/test/vitest-base.config.ts",
             "setupFiles": [
               "src/test-setup.ts"
             ]
