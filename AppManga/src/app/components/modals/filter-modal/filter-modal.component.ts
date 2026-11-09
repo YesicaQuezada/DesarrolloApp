@@ -1,13 +1,16 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
+import { ANIME_STATUS, MANGA_STATUS } from '../../../models/filters/filter.model';
+import { FilterSelection } from '../../../interfaces/common/filter-selection/filter-selection.interface';
+import { JikanGenre } from '../../../interfaces/common/jikan-genre/jikan-genre.interface';
 import { FilterService } from '../../../services/api/filter.service';
-import {
-  JikanGenre,
-  FilterSelection,
-  MANGA_STATUS,
-  ANIME_STATUS,
-} from '../../../models/filters/filter.model';
 
 @Component({
   selector: 'app-filter-modal',
@@ -36,11 +39,9 @@ export class FilterModalComponent implements OnInit {
 
   loading = true;
 
-  constructor(
-    private modalCtrl: ModalController,
-    private filterService: FilterService,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  private modalCtrl = inject(ModalController);
+  private filterService = inject(FilterService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     // 👇 Acá se asigna según el @Input() type, ya con this disponible

@@ -14,12 +14,12 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    // Cambiado para cargar directamente tu LoginPage Standalone corregida
-    loadComponent: () =>
-      import('./pages/login/login.page').then((m) => m.LoginPage),
+    loadChildren: () =>
+      import('./pages/login/login.module').then((m) => m.LoginPageModule),
   },
+
   {
-    path: 'record',
+    path: 'registro',
     loadChildren: () =>
       import('./pages/record/record.module').then((m) => m.RecordPageModule),
   },

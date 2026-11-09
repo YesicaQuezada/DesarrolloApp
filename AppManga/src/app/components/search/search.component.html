@@ -1,29 +1,14 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-segment [(ngModel)]="segmentoActual">
-      <ion-segment-button value="anime">
-        <ion-label>Anime</ion-label>
-      </ion-segment-button>
+<ion-toolbar>
+  <app-media-segment
+    [valor]="tipo"
+    (valorChange)="alCambiarSegmento($event)"
+  ></app-media-segment>
+</ion-toolbar>
 
-      <ion-segment-button value="manga">
-        <ion-label>Manga</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-searchbar
-    *ngIf="segmentoActual === 'anime'"
-    show-clear-button="always"
-    clear-icon="trash-bin"
-    placeholder="Buscar anime"
-  ></ion-searchbar>
-
-  <ion-searchbar
-    *ngIf="segmentoActual === 'manga'"
-    show-clear-button="always"
-    clear-icon="trash-bin"
-    placeholder="Buscar manga"
-  ></ion-searchbar>
-</ion-content>
+<ion-searchbar
+  [placeholder]="tipo === 'anime' ? 'Buscar anime' : 'Buscar manga, autor o género'"
+  [debounce]="300"
+  show-clear-button="always"
+  clear-icon="trash-bin"
+  (ionInput)="alEscribir($event)">
+</ion-searchbar>

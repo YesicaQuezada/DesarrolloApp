@@ -4,46 +4,34 @@
     <ion-card-subtitle>{{ subTitulo }}</ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
-    <ion-list>
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <img
-            alt="Silhouette of mountains"
-            src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-          />
-        </ion-thumbnail>
-        <ion-label>Item</ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <img
-            alt="Silhouette of mountains"
-            src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-          />
-        </ion-thumbnail>
-        <ion-label>Item</ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <img
-            alt="Silhouette of mountains"
-            src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-          />
-        </ion-thumbnail>
-        <ion-label>Item</ion-label>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-thumbnail slot="start">
-          <img
-            alt="Silhouette of mountains"
-            src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-          />
-        </ion-thumbnail>
-        <ion-label>Item</ion-label>
-      </ion-item>
-    </ion-list>
+    @if (loading) {
+      <div class="list-card__estado">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    } @else if (items.length === 0) {
+      <p class="list-card__estado">Todavía no agregaste favoritos aquí.</p>
+    } @else {
+      <ion-list>
+        @for (item of items; track item.mediaId) {
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img [src]="item.image" [alt]="item.title" />
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ item.title }}</h2>
+            </ion-label>
+            <ion-button
+              slot="end"
+              fill="clear"
+              color="danger"
+              [attr.aria-label]="'Quitar ' + item.title + ' de favoritos'"
+              (click)="quitar(item)"
+            >
+              <ion-icon slot="icon-only" name="trash-bin"></ion-icon>
+            </ion-button>
+          </ion-item>
+        }
+      </ion-list>
+    }
   </ion-card-content>
 </ion-card>

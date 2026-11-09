@@ -19,8 +19,16 @@
   </div>
 
   <!-- Botón de Ingresar -->
-  <button (click)="onLogin()" 
+  <button (click)="onLogin()" [disabled]="isLoading"
           style="width: 100%; padding: 12px; background-color: #3880ff; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;">
-    Ingresar
+    {{ isLoading ? 'Ingresando...' : 'Ingresar' }}
   </button>
+
+  <!-- Enlace para ir al Registro -->
+  <div style="text-align: center; font-size: 14px; margin-top: 20px;">
+    <a href="/registro" style="color: #3880ff; text-decoration: none; font-weight: bold;">
+      ¿No tenes cuenta? Regístrate acá
+    </a>
+  </div>
 </div>
+

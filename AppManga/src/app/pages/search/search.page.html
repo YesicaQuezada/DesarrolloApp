@@ -1,15 +1,64 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>search</ion-title>
+    <ion-title>Buscar</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">search</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <app-search (buscar)="alBuscar($event)"></app-search>
 
-  <app-search-component></app-search-component>
+  @if (loading) {
+    <div class="ion-text-center ion-padding">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  }
+
+  @if (error) {
+    <ion-text color="danger">
+      <p class="ion-text-center ion-padding">{{ error }}</p>
+    </ion-text>
+  }
+
+  @if (!loading && !error) {
+    <ion-list>
+      @for (m of resultados; track m.mal_id) {
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img [src]="m.images.jpg.image_url" [alt]="m.title" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ m.title }}</h2>
+            <p>
+              {{ m.type }} · {{ m.status }}
+              @if (m.score) {
+                · ⭐ {{ m.score }}
+              }
+            </p>
+          </ion-label>
+          <button
+            type="button"
+            slot="end"
+            class="resultado__fav"
+            [class.resultado__fav--activa]="esFavorito(m.mal_id)"
+            [attr.aria-label]="
+              esFavorito(m.mal_id)
+                ? 'Quitar de favoritos'
+                : 'Agregar a favoritos'
+            "
+            (click)="alternarFavorito(m)"
+          >
+            <ion-icon
+              [name]="esFavorito(m.mal_id) ? 'heart' : 'heart-outline'"
+            ></ion-icon>
+          </button>
+        </ion-item>
+      }
+    </ion-list>
+
+    @if (resultados.length === 0) {
+      <p class="ion-text-center ion-padding">
+        No se encontraron resultados.
+      </p>
+    }
+  }
 </ion-content>

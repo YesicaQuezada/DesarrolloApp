@@ -1,3 +1,10 @@
 ion-item {
   --padding-start: 0;
 }
+
+/* Estados de la lista (spinner / vacío) */
+.list-card__estado {
+  text-align: center;
+  padding: 20px 8px;
+  color: #7a8a96;
+}

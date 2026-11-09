@@ -1,23 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { JikanAnimeResponse } from '../../models/anime/anime.model';
-import { FilterSelection } from '../../models/filters/filter.model';
+import { JikanAnimeResponse } from '../../interfaces/anime-response/anime-response.interface';
+import { FilterSelection } from '../../interfaces/common/filter-selection/filter-selection.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AnimeService {
   private readonly baseUrl = `${environment.apiUrl}/v4/anime`;
 
-  constructor(private http: HttpClient) {}
-
-  private get headers(): HttpHeaders {
-    return new HttpHeaders({
-      'CF-Access-Client-Id': environment.cfAccessClientId,
-      'CF-Access-Client-Secret': environment.cfAccessClientSecret,
-    });
-  }
+  private http = inject(HttpClient);
 
   getAnimeList(
     page: number = 1,
@@ -32,9 +25,18 @@ export class AnimeService {
     if (filters?.demographicId) params = params.set('demographics', filters.demographicId.toString());
     if (filters?.status) params = params.set('status', filters.status);
 
-    return this.http.get<JikanAnimeResponse>(this.baseUrl, {
-      headers: this.headers,
-      params,
-    });
+    return this.http.get<JikanAnimeResponse>(this.baseUrl, { params });
+  }
+
+  /**
+   * @function buscarAnime
+   * @description Busca animes por texto libre en la API de Jikan (param q)
+   */
+  buscarAnime(texto: string, limit: number = 20): Observable<JikanAnimeResponse> {
+    const params = new HttpParams()
+      .set('q', texto)
+      .set('limit', limit.toString());
+
+    return this.http.get<JikanAnimeResponse>(this.baseUrl, { params });
   }
 }

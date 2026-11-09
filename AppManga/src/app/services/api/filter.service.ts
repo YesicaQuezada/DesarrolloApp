@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import { JikanGenre } from '../../models/filters/filter.model';
+import { JikanGenre } from '../../interfaces/common/jikan-genre/jikan-genre.interface';
 
 interface CacheEntry<T> {
   data: T;
@@ -15,27 +15,18 @@ interface CacheEntry<T> {
 export class FilterService {
   private readonly TTL = 24 * 60 * 60 * 1000;
 
-  constructor(private http: HttpClient) {}
-
-  private get headers(): HttpHeaders {
-    return new HttpHeaders({
-      'CF-Access-Client-Id': environment.cfAccessClientId,
-      'CF-Access-Client-Secret': environment.cfAccessClientSecret,
-    });
-  }
+  private http = inject(HttpClient);
 
   getGenres(type: 'manga' | 'anime'): Observable<JikanGenre[]> {
     return this.fetchWithCache<JikanGenre[]>(`genres_${type}`, () =>
-      this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`, {
-        headers: this.headers,
-      }).pipe(map((res) => res.data))
+      this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`)
+        .pipe(map((res) => res.data))
     );
   }
 
   getDemographics(type: 'manga' | 'anime'): Observable<JikanGenre[]> {
     return this.fetchWithCache<JikanGenre[]>(`demographics_${type}`, () =>
       this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`, {
-        headers: this.headers,
         params: new HttpParams().set('filter', 'demographics'),
       }).pipe(map((res) => res.data))
     );
