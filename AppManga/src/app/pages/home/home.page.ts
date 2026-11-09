@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 
@@ -20,6 +21,7 @@ export class HomePage implements OnInit, OnDestroy {
   private mangaService = inject(MangaService);
   private animeService = inject(AnimeService);
   private modalCtrl = inject(ModalController);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   segment: TipoMedio = 'manga';
@@ -106,7 +108,9 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   onMangaClick(manga: MangaModel): void {
-    console.log('Manga clickeado:', manga.title);
+    this.router.navigate(['/media-detail', 'manga', manga.mal_id], {
+      state: { item: manga },
+    });
   }
 
   // ---------- Animes ----------
@@ -150,7 +154,9 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   onAnimeClick(anime: AnimeModel): void {
-    console.log('Anime clickeado:', anime.title);
+    this.router.navigate(['/media-detail', 'anime', anime.mal_id], {
+      state: { item: anime },
+    });
   }
 
   // ---------- Filtros ----------

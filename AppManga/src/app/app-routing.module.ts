@@ -23,6 +23,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/record/record.module').then((m) => m.RecordPageModule),
   },
+  {
+    path: 'media-detail',
+    loadChildren: () =>
+      import('./pages/media-detail/media-detail.module').then(
+        (m) => m.MediaDetailPageModule,
+      ),
+  },
 ];
 
 @NgModule({

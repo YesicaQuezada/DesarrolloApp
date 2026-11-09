@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="item as media">
+  <div class="detail-hero">
+    <img [src]="imageUrl" [alt]="media.title" />
+    <div class="hero-overlay"></div>
+    <ion-button
+      class="favorite-button"
+      fill="clear"
+      shape="round"
+      [attr.aria-label]="esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+      (click)="alternarFavorito()"
+    >
+      <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'" size="large"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div class="detail-body">
+    <p class="detail-type">{{ tipo === 'anime' ? 'Anime' : 'Manga' }}</p>
+    <h1>{{ media.title }}</h1>
+
+    @if (media.title_english) {
+      <h2>{{ media.title_english }}</h2>
+    }
+
+    <div class="meta-chips">
+      @for (chip of metaChips; track chip) {
+        <span class="meta-chip">{{ chip }}</span>
+      }
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="label">Estado</span>
+        <strong>{{ media.status }}</strong>
+      </div>
+      <div class="stat-item">
+        <span class="label">Puntuación</span>
+        <strong>{{ media.score ?? '—' }}</strong>
+      </div>
+      <div class="stat-item">
+        <span class="label">{{ etiquetaEstadistica }}</span>
+        <strong>{{ valorEstadistica }}</strong>
+      </div>
+    </div>
+
+    @if (tipo === 'manga') {
+      <div class="stats-grid secondary">
+        <div class="stat-item">
+          <span class="label">Volúmenes</span>
+          <strong>{{ volumenes }}</strong>
+        </div>
+      </div>
+    }
+
+    <section class="synopsis">
+      <h3>Sinopsis</h3>
+      <p>{{ descripcion }}</p>
+    </section>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="!item" [fullscreen]="true">
+  <div class="empty-state">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No hay información disponible para este título.</p>
+  </div>
+</ion-content>
