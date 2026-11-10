@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController, ToastController } from '@ionic/angular';
 import { getCurrentUser, signIn, fetchUserAttributes } from 'aws-amplify/auth';
 
 @Component({
@@ -15,23 +16,50 @@ export class LoginPage implements OnInit {
 
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private alertController = inject(AlertController);
+  private toastController = inject(ToastController);
 
   ngOnInit() {
     void this.redirectIfAuthenticated();
   }
 
   /**
+   * @function presentToast
+   * @description Muestra una notificación rápida abajo con color verde (success) o rojo (danger)
+   */
+  async presentToast(mensaje: string, color: 'success' | 'danger') {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+      color: color
+    });
+    await toast.present();
+  }
+
+  /**
+   * @function presentAlert
+   * @description Muestra un cuadro de diálogo emergente integrado en la pantalla
+   */
+  async presentAlert(titulo: string, mensaje: string) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensaje,
+      buttons: ['Aceptar']
+    });
+    await alert.present();
+  }
+
+  /**
    * @function onLogin
    * @description Autentica las credenciales en AWS Cognito y saluda al usuario con su apodo
    */
-
   async onLogin() {
     if (this.isLoading) {
       return;
     }
 
     if (!this.email || !this.password) {
-      alert('Por favor, completa todos los campos.');
+      await this.presentToast('Debe ingresar todos los valores', 'danger');
       return;
     }
 
@@ -50,7 +78,7 @@ export class LoginPage implements OnInit {
       const attributes = await fetchUserAttributes();
       const nombreUsuario = attributes.nickname || 'Usuario';
 
-      alert(`¡Bienvenido de nuevo, ${nombreUsuario}!`);
+      await this.presentToast(`¡Bienvenido de nuevo, ${nombreUsuario}!`, 'success');
       this.router.navigate(['/tabs']);
     } catch (error: any) {
       if (error?.name === 'UserAlreadyAuthenticatedException') {
@@ -59,10 +87,10 @@ export class LoginPage implements OnInit {
       }
 
       console.error('Error al iniciar sesión:', error);
-      alert('Error: ' + (error.message || 'No se pudo iniciar sesión'));
+     
+      await this.presentAlert('Error de Acceso', 'Datos incorrectos o usuario no registrado');
     } finally {
       this.isLoading = false;
-      // Angular 22 solo refresca vistas marcadas: tras un `await` hay que marcarla.
       this.cdr.markForCheck();
     }
   }
@@ -76,7 +104,7 @@ export class LoginPage implements OnInit {
       await getCurrentUser();
       const attributes = await fetchUserAttributes();
       const nombreUsuario = attributes.nickname || 'Usuario';
-      alert(`Sesión activa: ¡Hola, ${nombreUsuario}!`);
+      await this.presentToast(`Sesión activa: ¡Hola, ${nombreUsuario}!`, 'success');
       await this.router.navigate(['/tabs']);
       return true;
     } catch {
@@ -84,3 +112,4 @@ export class LoginPage implements OnInit {
     }
   }
 }
+
