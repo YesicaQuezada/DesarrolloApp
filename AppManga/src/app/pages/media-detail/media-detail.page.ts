@@ -34,6 +34,16 @@ export class MediaDetailPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargarItem();
+  }
+
+  ionViewWillEnter(): void {
+    if (this.item) {
+      void this.actualizarEstadoFavorito();
+    }
+  }
+
+  private cargarItem(): void {
     const tipoParam = this.route.snapshot.paramMap.get('type');
     const ident = Number(this.route.snapshot.paramMap.get('id') ?? '0');
 
@@ -60,6 +70,10 @@ export class MediaDetailPage implements OnInit {
 
   get descripcion(): string {
     return this.sinopsisTraducida;
+  }
+
+  goBack(): void {
+    this.router.navigate(['/tabs/home']);
   }
 
   async alternarFavorito(): Promise<void> {

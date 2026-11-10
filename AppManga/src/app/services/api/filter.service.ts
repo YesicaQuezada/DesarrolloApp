@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { CapacitorHttp, HttpOptions } from '@capacitor/core';
+import { from, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
@@ -15,21 +15,35 @@ interface CacheEntry<T> {
 export class FilterService {
   private readonly TTL = 24 * 60 * 60 * 1000;
 
-  private http = inject(HttpClient);
-
   getGenres(type: 'manga' | 'anime'): Observable<JikanGenre[]> {
-    return this.fetchWithCache<JikanGenre[]>(`genres_${type}`, () =>
-      this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`)
-        .pipe(map((res) => res.data))
-    );
+    return this.fetchWithCache<JikanGenre[]>(`genres_${type}`, () => {
+      const options: HttpOptions = {
+        url: `${environment.apiUrl}/v4/genres/${type}`,
+        headers: {
+          'CF-Access-Client-Id': environment.cfAccessClientId,
+          'CF-Access-Client-Secret': environment.cfAccessClientSecret,
+        },
+      };
+      return from(CapacitorHttp.get(options)).pipe(
+        map((res) => (res.data as { data: JikanGenre[] }).data),
+      );
+    });
   }
 
   getDemographics(type: 'manga' | 'anime'): Observable<JikanGenre[]> {
-    return this.fetchWithCache<JikanGenre[]>(`demographics_${type}`, () =>
-      this.http.get<{ data: JikanGenre[] }>(`${environment.apiUrl}/v4/genres/${type}`, {
-        params: new HttpParams().set('filter', 'demographics'),
-      }).pipe(map((res) => res.data))
-    );
+    return this.fetchWithCache<JikanGenre[]>(`demographics_${type}`, () => {
+      const options: HttpOptions = {
+        url: `${environment.apiUrl}/v4/genres/${type}`,
+        params: { filter: 'demographics' },
+        headers: {
+          'CF-Access-Client-Id': environment.cfAccessClientId,
+          'CF-Access-Client-Secret': environment.cfAccessClientSecret,
+        },
+      };
+      return from(CapacitorHttp.get(options)).pipe(
+        map((res) => (res.data as { data: JikanGenre[] }).data),
+      );
+    });
   }
 
   private fetchWithCache<T>(key: string, fetchFn: () => Observable<T>): Observable<T> {

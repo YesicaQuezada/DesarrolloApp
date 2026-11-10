@@ -52,6 +52,12 @@ export class SearchPage implements OnInit, OnDestroy {
     this.buscar({ texto: '', tipo: this.tipo });
   }
 
+  ionViewWillEnter(): void {
+    if (this.resultados.length > 0) {
+      void this.marcarFavoritos();
+    }
+  }
+
   ngOnDestroy(): void {
     this.busquedaSub?.unsubscribe();
   }

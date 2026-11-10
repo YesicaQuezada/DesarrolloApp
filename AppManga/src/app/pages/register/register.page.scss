@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: #eef2f5;
+}
+
+.register-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding-top: 24px;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.register-header h2 {
+  margin: 0 0 8px;
+  color: #1f2d3d;
+}
+
+.register-header p {
+  margin: 0;
+  color: #5c6b7a;
+}
+
+ion-item {
+  --background: #fff;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  --inner-border-width: 0;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 18px;
+}
+
+.login-link a {
+  color: #2b8fe4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.verification-box {
+  margin-top: 8px;
+}

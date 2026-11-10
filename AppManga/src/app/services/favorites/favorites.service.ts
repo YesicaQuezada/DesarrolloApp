@@ -23,6 +23,7 @@ export class SinSesionError extends Error {
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {
   private readonly db: Database = getDatabase(firebaseApp);
+  private readonly favoritosCache = new Map<FavoritoTipo, Set<number>>();
 
   /**
    * @function uidActual
@@ -67,13 +68,30 @@ export class FavoritesService {
   }
 
   /**
+   * @function refrescarTipo
+   * @description Actualiza el caché del tipo solicitado con los favoritos reales
+   * de la RTDB para que todas las vistas compartan el mismo estado.
+   */
+  async refrescarTipo(tipo: FavoritoTipo): Promise<Set<number>> {
+    const ids = new Set<number>();
+    const favoritos = await this.listar(tipo);
+    favoritos.forEach((favorito) => ids.add(favorito.mediaId));
+    this.favoritosCache.set(tipo, ids);
+    return ids;
+  }
+
+  /**
    * @function esFavorito
    * @description true si el medio ya está marcado como favorito.
    */
   async esFavorito(tipo: FavoritoTipo, mediaId: number): Promise<boolean> {
-    const uid = await this.uidActual();
-    const snap = await get(this.favRef(uid, tipo, mediaId));
-    return snap.exists();
+    const cache = this.favoritosCache.get(tipo);
+    if (cache) {
+      return cache.has(mediaId);
+    }
+
+    const ids = await this.refrescarTipo(tipo);
+    return ids.has(mediaId);
   }
 
   /**
@@ -83,6 +101,9 @@ export class FavoritesService {
   async agregar(favorito: Favorito): Promise<void> {
     const uid = await this.uidActual();
     await set(this.favRef(uid, favorito.type, favorito.mediaId), favorito.toJSON());
+    const cacheActual = this.favoritosCache.get(favorito.type) ?? new Set<number>();
+    cacheActual.add(favorito.mediaId);
+    this.favoritosCache.set(favorito.type, cacheActual);
   }
 
   /**
@@ -92,5 +113,8 @@ export class FavoritesService {
   async quitar(tipo: FavoritoTipo, mediaId: number): Promise<void> {
     const uid = await this.uidActual();
     await remove(this.favRef(uid, tipo, mediaId));
+    const cacheActual = this.favoritosCache.get(tipo) ?? new Set<number>();
+    cacheActual.delete(mediaId);
+    this.favoritosCache.set(tipo, cacheActual);
   }
 }

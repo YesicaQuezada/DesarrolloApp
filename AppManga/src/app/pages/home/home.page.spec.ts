@@ -5,8 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { vi } from 'vitest';
 
 import { HomePage } from './home.page';
-import { AnimeCardComponent } from '../../components/cards/anime-card/anime-card.component';
-import { MangaCardComponent } from '../../components/cards/manga-card/manga-card.component';
+import { MediaCardComponent } from '../../components/cards/media-card/media-card.component';
 import { MediaSegmentComponent } from '../../components/media-segment/media-segment.component';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
 import { MangaModel } from '../../models/manga/manga.model';
@@ -27,8 +26,7 @@ describe('HomePage', () => {
         HomePage,
         MediaSegmentComponent,
         PaginationComponent,
-        MangaCardComponent,
-        AnimeCardComponent,
+        MediaCardComponent,
       ],
       // IonicModule además provee ModalController (que inyecta HomePage).
       imports: [IonicModule.forRoot(), RouterTestingModule],

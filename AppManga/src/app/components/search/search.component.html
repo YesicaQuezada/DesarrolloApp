@@ -5,10 +5,28 @@
   ></app-media-segment>
 </ion-toolbar>
 
-<ion-searchbar
-  [placeholder]="tipo === 'anime' ? 'Buscar anime' : 'Buscar manga, autor o género'"
-  [debounce]="300"
-  show-clear-button="always"
-  clear-icon="trash-bin"
-  (ionInput)="alEscribir($event)">
-</ion-searchbar>
+<div class="search-bar-row">
+  <ion-searchbar
+    class="searchbar-voice"
+    [value]="texto"
+    [placeholder]="tipo === 'anime' ? 'Buscar anime' : 'Buscar manga, autor o género'"
+    [debounce]="300"
+    show-clear-button="always"
+    clear-icon="trash-bin"
+    (ionInput)="alEscribir($event)"
+    (ionClear)="limpiarBusqueda()">
+  </ion-searchbar>
+
+  @if (voiceSupported) {
+    <ion-button
+      fill="clear"
+      size="small"
+      class="voice-btn"
+      [color]="isListening ? 'danger' : 'primary'"
+      (click)="iniciarBusquedaPorVoz()"
+      [attr.aria-label]="isListening ? 'Detener búsqueda por voz' : 'Buscar por voz'"
+    >
+      <ion-icon [name]="isListening ? 'mic-off' : 'mic'"></ion-icon>
+    </ion-button>
+  }
+</div>

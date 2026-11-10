@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { beforeEach, describe, expect, it, spyOn } from 'vitest';
 
 import { SearchPage } from './search.page';
 import { FavoritesService } from '../../services/favorites/favorites.service';
@@ -40,6 +41,19 @@ describe('SearchPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('refresca el estado de favoritos al volver a la vista', async () => {
+    component.resultados = [{ mal_id: 42 } as ItemJikan];
+    const pagina = component as unknown as {
+      marcarFavoritos: () => Promise<void>;
+    };
+
+    const spy = spyOn(pagina, 'marcarFavoritos').and.resolveTo();
+
+    component.ionViewWillEnter();
+
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
   it('un marcado viejo de otra solapa no contamina la actual', async () => {
