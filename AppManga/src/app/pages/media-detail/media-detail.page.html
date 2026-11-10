@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ tipo === 'anime' ? 'Anime' : 'Manga' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="record-page" *ngIf="item as media">
+  <div class="detail-wrap">
+    <div class="cover-box">
+      <img [src]="imageUrl" [alt]="media.title" />
+    </div>
+
+    <div class="info-box">
+      <h1>{{ media.title }}</h1>
+
+      <div class="meta-row">
+        <span class="badge">{{ tipo === 'anime' ? 'Anime' : 'Manga' }}</span>
+        <span class="badge" *ngIf="media.status">{{ media.status }}</span>
+        <span class="badge">{{ etiquetaEstadistica }}: {{ valorEstadistica }}</span>
+        @if (tipo === 'manga') {
+          <span class="badge">Volúmenes: {{ volumenes }}</span>
+        }
+      </div>
+
+      <div class="score-box" *ngIf="media.score !== null && media.score !== undefined">
+        <ion-icon name="star"></ion-icon>
+        <span>{{ media.score }}</span>
+      </div>
+
+      <div class="description">
+        <h3>Sinopsis</h3>
+        <p>{{ descripcion }}</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="!item" [fullscreen]="true">
+  <div class="empty-state">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No hay información disponible para este título.</p>
+  </div>
+</ion-content>

@@ -22,7 +22,7 @@
   @if (!loading && !error) {
     <ion-list>
       @for (m of resultados; track m.mal_id) {
-        <ion-item>
+        <ion-item button detail="false" (click)="abrirDetalle(m)">
           <ion-thumbnail slot="start">
             <img [src]="m.images.jpg.image_url" [alt]="m.title" />
           </ion-thumbnail>
@@ -45,7 +45,7 @@
                 ? 'Quitar de favoritos'
                 : 'Agregar a favoritos'
             "
-            (click)="alternarFavorito(m)"
+            (click)="alternarFavorito($event, m)"
           >
             <ion-icon
               [name]="esFavorito(m.mal_id) ? 'heart' : 'heart-outline'"

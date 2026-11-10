@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="register-container">
+    <div class="register-header">
+      <h2>Crear cuenta</h2>
+      <p>Registrate para guardar tus animes y mangas favoritos.</p>
+    </div>
+
+    @if (!showVerificationStep) {
+      <ion-item>
+        <ion-label position="stacked">Correo electrónico</ion-label>
+        <ion-input type="email" [(ngModel)]="email" name="email" placeholder="ejemplo@correo.com"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Apodo</ion-label>
+        <ion-input type="text" [(ngModel)]="nickname" name="nickname" placeholder="Tu nombre de usuario"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" placeholder="********"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Confirmar contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="********"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" class="ion-margin-top" (click)="onRegister()" [disabled]="isLoading">
+        {{ isLoading ? 'Registrando...' : 'Registrarme' }}
+      </ion-button>
+    }
+
+    @if (showVerificationStep) {
+      <div class="verification-box">
+        <ion-item>
+          <ion-label position="stacked">Código de verificación</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="verificationCode"
+            name="verificationCode"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="123456"
+          ></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" class="ion-margin-top" (click)="onConfirmSignUp()" [disabled]="isLoading">
+          {{ isLoading ? 'Verificando...' : 'Confirmar código' }}
+        </ion-button>
+      </div>
+    }
+
+    <div class="login-link">
+      <a routerLink="/login">Ya tengo cuenta</a>
+    </div>
+  </div>
+</ion-content>

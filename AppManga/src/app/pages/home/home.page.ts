@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 
@@ -20,6 +21,7 @@ export class HomePage implements OnInit, OnDestroy {
   private mangaService = inject(MangaService);
   private animeService = inject(AnimeService);
   private modalCtrl = inject(ModalController);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   segment: TipoMedio = 'manga';
@@ -27,6 +29,7 @@ export class HomePage implements OnInit, OnDestroy {
   mangas: MangaModel[] = [];
   mangaPage = 1;
   mangaTotalPaginas = 1;
+  mangaHasNextPage = false;
   mangaLoading = false;
   mangaError: string | null = null;
   mangaFilters: FilterSelection = { genreId: null, demographicId: null, status: null };
@@ -34,6 +37,7 @@ export class HomePage implements OnInit, OnDestroy {
   animes: AnimeModel[] = [];
   animePage = 1;
   animeTotalPaginas = 1;
+  animeHasNextPage = false;
   animeLoading = false;
   animeError: string | null = null;
   animeFilters: FilterSelection = { genreId: null, demographicId: null, status: null };
@@ -63,11 +67,10 @@ export class HomePage implements OnInit, OnDestroy {
   // ---------- Mangas ----------
   /**
    * @function loadMangas
-   * @description Carga una página concreta de mangas. A diferencia del
-   * infinite scroll, la lista se reemplaza en lugar de acumularse: cada
-   * página muestra solo sus 20 ítems.
+   * @description Carga una página concreta de mangas. Si `append` es true,
+   * acumula la página nueva al final de la lista para que funcione el infinite scroll.
    */
-  loadMangas(page: number): void {
+  loadMangas(page: number, append = false): void {
     if (this.mangaLoading) return;
     this.mangaPage = page;
     this.mangaLoading = true;
@@ -77,8 +80,10 @@ export class HomePage implements OnInit, OnDestroy {
     this.mangaSub?.unsubscribe();
     this.mangaSub = this.mangaService.getMangaList(page, this.limit, this.mangaFilters).subscribe({
       next: (res) => {
-        this.mangas = MangaModel.fromJSONArray(res?.data);
+        const nuevos = MangaModel.fromJSONArray(res?.data ?? []);
+        this.mangas = append ? [...this.mangas, ...nuevos] : nuevos;
         this.mangaTotalPaginas = Math.max(res?.pagination?.last_visible_page ?? 1, 1);
+        this.mangaHasNextPage = Boolean(res?.pagination?.has_next_page);
       },
       error: () => {
         this.mangaError = 'No se pudieron cargar los mangas.';
@@ -93,7 +98,19 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   cambiarPaginaManga(page: number): void {
-    this.loadMangas(page);
+    this.mangas = [];
+    this.loadMangas(page, false);
+  }
+
+  loadMoreMangas(event?: any): void {
+    if (!this.mangaHasNextPage || this.mangaLoading) {
+      event?.target?.complete?.();
+      return;
+    }
+
+    const nextPage = this.mangaPage + 1;
+    this.loadMangas(nextPage, true);
+    event?.target?.complete?.();
   }
 
   retryMangas(): void {
@@ -106,12 +123,14 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   onMangaClick(manga: MangaModel): void {
-    console.log('Manga clickeado:', manga.title);
+    this.router.navigate(['/media-detail', 'manga', manga.mal_id], {
+      state: { item: manga },
+    });
   }
 
   // ---------- Animes ----------
   /** @function loadAnimes - Igual que loadMangas pero para el medio anime. */
-  loadAnimes(page: number): void {
+  loadAnimes(page: number, append = false): void {
     if (this.animeLoading) return;
     this.animePage = page;
     this.animeLoading = true;
@@ -121,8 +140,10 @@ export class HomePage implements OnInit, OnDestroy {
     this.animeSub?.unsubscribe();
     this.animeSub = this.animeService.getAnimeList(page, this.limit, this.animeFilters).subscribe({
       next: (res) => {
-        this.animes = AnimeModel.fromJSONArray(res?.data);
+        const nuevos = AnimeModel.fromJSONArray(res?.data ?? []);
+        this.animes = append ? [...this.animes, ...nuevos] : nuevos;
         this.animeTotalPaginas = Math.max(res?.pagination?.last_visible_page ?? 1, 1);
+        this.animeHasNextPage = Boolean(res?.pagination?.has_next_page);
       },
       error: () => {
         this.animeError = 'No se pudieron cargar los animes.';
@@ -137,7 +158,19 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   cambiarPaginaAnime(page: number): void {
-    this.loadAnimes(page);
+    this.animes = [];
+    this.loadAnimes(page, false);
+  }
+
+  loadMoreAnimes(event?: any): void {
+    if (!this.animeHasNextPage || this.animeLoading) {
+      event?.target?.complete?.();
+      return;
+    }
+
+    const nextPage = this.animePage + 1;
+    this.loadAnimes(nextPage, true);
+    event?.target?.complete?.();
   }
 
   retryAnimes(): void {
@@ -150,7 +183,9 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   onAnimeClick(anime: AnimeModel): void {
-    console.log('Anime clickeado:', anime.title);
+    this.router.navigate(['/media-detail', 'anime', anime.mal_id], {
+      state: { item: anime },
+    });
   }
 
   // ---------- Filtros ----------

@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (isLoggedIn) {
+    <div class="account-card">
+      <ion-icon name="person-circle-outline" class="account-icon"></ion-icon>
+
+      <h2>{{ nickname }}</h2>
+      <p>{{ email || 'Sin email asociado' }}</p>
+
+      <ion-button expand="block" color="danger" (click)="cerrarSesion()" [disabled]="loading">
+        {{ loading ? 'Cerrando sesión...' : 'Cerrar sesión' }}
+      </ion-button>
+    </div>
+  } @else {
+    <div class="account-card account-card--empty">
+      <ion-icon name="person-circle-outline" class="account-icon"></ion-icon>
+      <h2>Sin sesión activa</h2>
+      <p>Inicia sesión o crea una cuenta para guardar tus favoritos.</p>
+
+      <div class="account-actions">
+        <ion-button expand="block" routerLink="/login">Iniciar sesión</ion-button>
+        <ion-button expand="block" fill="outline" routerLink="/registro">Crear cuenta</ion-button>
+      </div>
+    </div>
+  }
+</ion-content>

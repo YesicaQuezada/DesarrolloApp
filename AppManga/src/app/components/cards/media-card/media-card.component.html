@@ -1,0 +1,17 @@
+<ion-card class="media-card" (click)="onClick()" button>
+  <div class="media-card__cover">
+    <img [src]="imageUrl" [alt]="media.title" loading="lazy" />
+    <button
+      type="button"
+      class="media-card__fav"
+      [class.media-card__fav--activa]="esFavorito"
+      [attr.aria-label]="esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+      (click)="alternarFavorito($event)"
+    >
+      <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'"></ion-icon>
+    </button>
+  </div>
+  <ion-card-header class="media-card__header">
+    <ion-card-title class="media-card__title">{{ media.title }}</ion-card-title>
+  </ion-card-header>
+</ion-card>

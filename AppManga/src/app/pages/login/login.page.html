@@ -7,14 +7,14 @@
   <!-- Campo de Correo -->
   <div style="margin-bottom: 15px;">
     <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #444;">Correo Electrónico</label>
-    <input type="email" [(ngModel)]="email" name="email" placeholder="ejemplo@correo.com" 
+    <input type="email" [(ngModel)]="email" name="email" placeholder="ejemplo@correo.com"
            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
   </div>
 
   <!-- Campo de Contraseña -->
   <div style="margin-bottom: 25px;">
     <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #444;">Contraseña</label>
-    <input type="password" [(ngModel)]="password" name="password" placeholder="********" 
+    <input type="password" [(ngModel)]="password" name="password" placeholder="********"
            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
   </div>
 
@@ -26,7 +26,7 @@
 
   <!-- Enlace para ir al Registro -->
   <div style="text-align: center; font-size: 14px; margin-top: 20px;">
-    <a href="/registro" style="color: #3880ff; text-decoration: none; font-weight: bold;">
+    <a routerLink="/registro" style="color: #3880ff; text-decoration: none; font-weight: bold;">
       ¿No tenes cuenta? Regístrate acá
     </a>
   </div>

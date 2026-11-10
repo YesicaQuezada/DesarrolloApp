@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { heart, heartOutline } from 'ionicons/icons';
@@ -28,6 +29,7 @@ export class SearchPage implements OnInit, OnDestroy {
   private mangaService = inject(MangaService);
   private animeService = inject(AnimeService);
   private favoritosService = inject(FavoritesService);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private busquedaSub?: Subscription;
 
@@ -48,6 +50,12 @@ export class SearchPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.buscar({ texto: '', tipo: this.tipo });
+  }
+
+  ionViewWillEnter(): void {
+    if (this.resultados.length > 0) {
+      void this.marcarFavoritos();
+    }
   }
 
   ngOnDestroy(): void {
@@ -77,7 +85,15 @@ export class SearchPage implements OnInit, OnDestroy {
    * @description Agrega o quita un resultado de la búsqueda de favoritos,
    * guardándolo con el medio de la solapa activa.
    */
-  async alternarFavorito(item: ItemJikan): Promise<void> {
+  abrirDetalle(item: ItemJikan): void {
+    const tipo = item.type?.toLowerCase() === 'anime' ? 'anime' : 'manga';
+    this.router.navigate(['/media-detail', tipo, item.mal_id], {
+      state: { item },
+    });
+  }
+
+  async alternarFavorito(event: Event, item: ItemJikan): Promise<void> {
+    event.stopPropagation();
     try {
       if (this.favoritos.has(item.mal_id)) {
         await this.favoritosService.quitar(this.tipo, item.mal_id);
